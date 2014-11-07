@@ -51,6 +51,7 @@ class restore_exam_activity_structure_step extends restore_activity_structure_st
         $data = (object)$data;
         $oldid = $data->id;
         $data->course = $this->get_courseid();
+        $data->quizid = $this->get_mappingid('quiz', $data->quizid);
 
         $data->timecreated = $this->apply_date_offset($data->timecreated);
         $data->timemodified = $this->apply_date_offset($data->timemodified);
@@ -69,7 +70,7 @@ class restore_exam_activity_structure_step extends restore_activity_structure_st
 
         $data->examid = $this->get_new_parentid('exam');
         $data->userid = $this->get_mappingid('user', $data->userid);
-        $data->timemodified = $this->apply_date_offset($data->timemodified);
+        $data->attempttime = $this->apply_date_offset($data->attempttime);
 
         $newitemid = $DB->insert_record('exam_grades', $data);
         // No need to save this mapping as far as nothing depend on it

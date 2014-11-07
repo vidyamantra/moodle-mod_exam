@@ -81,7 +81,7 @@ echo html_writer::start_tag('div');
             $table->head = array('Name', 'Email', 'Attempted', 'Grade');
             foreach ($result as $gobject){
                 $name = $gobject->firstname ." ".$gobject->lastname;
-                $table->data[] = array($name, $gobject->email, $gobject->attempttime, $gobject->rawgrade);
+                $table->data[] = array($name, $gobject->email, userdate($gobject->attempttime), $gobject->rawgrade);
             }
         echo html_writer::table($table);
     echo html_writer::end_tag('div');

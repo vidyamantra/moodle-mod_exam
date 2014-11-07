@@ -49,15 +49,14 @@ class backup_exam_activity_structure_step extends backup_activity_structure_step
         $exam = new backup_nested_element('exam', array('id'), array(
             'course','name', 'quizid', 'intro', 'introformat', 'timecreated',
             'timemodified', 'grade', 'attempts', 'grademethod',
-            'marksperquestion'));
+            'marksperquestion', 'questionperpage'));
 
 
         // The exam_grades table
         // Grouped by a grades element this is relational to the exam and user.
         $grades = new backup_nested_element('grades');
         $grade = new backup_nested_element('grade', array('id'), array(
-            'userid','grade'
-        ));
+            'userid','grade', 'attempttime'));
         
 
 
@@ -73,6 +72,7 @@ class backup_exam_activity_structure_step extends backup_activity_structure_step
             $grade->set_source_table('exam_grades', array('examid'=>backup::VAR_PARENTID));
         }
 
+        $exam->annotate_ids('quiz', 'quizid');
         // Define id annotations
         $grade->annotate_ids('user', 'userid');
 
