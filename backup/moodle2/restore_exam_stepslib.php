@@ -50,8 +50,18 @@ class restore_exam_activity_structure_step extends restore_activity_structure_st
 
         $data = (object)$data;
         $oldid = $data->id;
+        $oldcourseid = $data->course;//save original course id
+        $oldquizid = $data->quizid; //save original quiz id
         $data->course = $this->get_courseid();
-        $data->quizid = $this->get_mappingid('quiz', $data->quizid);
+        
+        // In same couse mapped quiz id missing
+        // This is for course restore
+        $data->quizid = $this->get_mappingid('quiz', $data->quizid); 
+        // Workround for module restor in same course
+        // In other course quizid blank if dependent quiz not restored
+        if(empty($data->quizid) && ($oldcourseid==$data->course)){
+            $data->quizid = $oldquizid;
+        }
 
         $data->timecreated = $this->apply_date_offset($data->timecreated);
         $data->timemodified = $this->apply_date_offset($data->timemodified);
@@ -60,6 +70,7 @@ class restore_exam_activity_structure_step extends restore_activity_structure_st
         $newitemid = $DB->insert_record('exam', $data);
         // immediately after inserting "activity" record, call this
         $this->apply_activity_instance($newitemid);
+        
     }
 
 
