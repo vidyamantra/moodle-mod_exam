@@ -73,8 +73,18 @@ $capabilities = array(
             'manager' => CAP_ALLOW
         )
     ),
+        // Preview the exam.
+    'mod/exam:preview' => array(
+        'captype' => 'write', // Only just a write.
+        'contextlevel' => CONTEXT_MODULE,
+        'archetypes' => array(
+            'teacher' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW
+        )
+    ),
 
-    'mod/exam:submit' => array(
+    'mod/exam:attempt' => array(
         'riskbitmask' => RISK_SPAM,
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,

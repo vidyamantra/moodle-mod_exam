@@ -345,11 +345,11 @@
                             questionHTML.show();//ToDo next should also be enabled
                             //(_nextQuestionBtn).fadeIn(300, kN(key,1));
                             var examnav = $(' <a href="#question' + (count - 1) + 
-                            '" class="qnbutton notyetanswered free thispage" title="Not yet answered" id="question' +
+                            '" class="qnbutton notyetanswered free thispage" title="Not yet answered" id="navquestion' +
                              (count - 1) + '">' + (count) + '</a>');                            
                         }else{
                             var examnav = $(' <a href="#question' + (count - 1) +
-                             '" class="qnbutton notyetanswered free" title="Not yet answered" id="question' +
+                             '" class="qnbutton notyetanswered free" title="Not yet answered" id="navquestion' +
                               (count - 1) + '">' + (count) + '</a>');
                         }    
                         $( "div#exam_navblock .content .qn_buttons" ).append(examnav);    
@@ -502,7 +502,7 @@
 
                 // Verify all/any true answers (and no false ones) were submitted
                 var correctResponse = plugin.method.compareAnswers(trueAnswers, selectedAnswers, selectAny);
-                $('a#' + (questionLI.attr('id')) + '.qnbutton').removeClass('notyetanswered').removeAttr( "title" );//remove class from navigation bar
+                $('a#nav' + (questionLI.attr('id')) + '.qnbutton').removeClass('notyetanswered').removeAttr( "title" );//remove class from navigation bar
 
                 if (correctResponse) {
                     questionLI.addClass(correctClass);
@@ -510,14 +510,14 @@
                         answerLIs.eq(selectedAnswers[0]).removeClass(incorrectResponseClass).addClass(correctResponseClass);
                     }
 
-                    $('a#' + (questionLI.attr('id')) + '.qnbutton').removeClass('incorrect').addClass("correct");
+                    $('a#nav' + (questionLI.attr('id')) + '.qnbutton').removeClass('incorrect').addClass("correct");
                 } else {
                     questionLI.removeClass(correctClass);
                     if(plugin.config.questionMode != 'deferredfeedback'){
                        answerLIs.eq(selectedAnswers[0]).addClass('wrong');
                         //answerLIs.eq(selectedAnswers[0]).removeClass(correctResponseClass).addClass(incorrectResponseClass);
                     }
-                    $('a#' + (questionLI.attr('id')) + '.qnbutton').removeClass('correct').addClass("incorrect");
+                    $('a#nav' + (questionLI.attr('id')) + '.qnbutton').removeClass('correct').addClass("incorrect");
                 }
                 
                 // Toggle appropriate response (either for display now and / or on completion)
@@ -564,8 +564,8 @@
                     return false;
                 }
 
-                $('a#question0.qnbutton').removeClass("thispage");//remove paging button highlight for first question
-                $('a#question0.qnbutton').nextAll('.qnbutton').removeClass("thispage");//remove paging button highlighing 
+                $('a#navquestion0.qnbutton').removeClass("thispage");//remove paging button highlight for first question
+                $('a#navquestion0.qnbutton').nextAll('.qnbutton').removeClass("thispage");//remove paging button highlighing 
                 if (nextQuestion.length) {
                     currentQuestion.fadeOut(300, function(){  
                         //code for page(added by pinky)
@@ -577,7 +577,7 @@
                             currentQuestion.nextUntil('li#question' + indx +'.question').show();
                             $('li#question' + (indx-1) +'.question').find(_prevQuestionBtn).show().end().fadeIn(500, kN(key,1));                          
 
-                            $('a#'+currentQuestion[0].id+'.qnbutton').nextUntil('a#question'+ indx +
+                            $('a#nav'+currentQuestion[0].id+'.qnbutton').nextUntil('a#navquestion'+ indx +
                              '.qnbutton').addClass("thispage");//paging button highlight
                             
                         }else{
@@ -585,7 +585,7 @@
                            if (!$('li#question' + (quizValues.questions.length-1) + 
                            '.question').find(_prevQuestionBtn).show().end().length) kN(key,1).apply (null, []);
                            
-                           $('a#'+currentQuestion[0].id+'.qnbutton').nextAll('.qnbutton').addClass("thispage"); //paging button highlight
+                           $('a#nav'+currentQuestion[0].id+'.qnbutton').nextAll('.qnbutton').addClass("thispage"); //paging button highlight
                         }
                         //if (!$('li#question' + (indx-1) +'.question').find(_prevQuestionBtn).show().end().length) kN(key,1).apply (null, []);
                         //end of code
@@ -610,8 +610,8 @@
                 var questionLI = $($(backButton).parents(_question)[0]),
                     answers    = questionLI.find(_answers);
 
-                $('a#question0.qnbutton').removeClass("thispage");//remove paging button highlight for first question
-                $('a#question0.qnbutton').nextAll('.qnbutton').removeClass("thispage");//remove paging button highlighing 
+                $('a#navquestion0.qnbutton').removeClass("thispage");//remove paging button highlight for first question
+                $('a#navquestion0.qnbutton').nextAll('.qnbutton').removeClass("thispage");//remove paging button highlighing 
     
                 // Back to previous question
                 if (answers.css('display') === 'block' ) {
@@ -633,12 +633,12 @@
                         }
                         if(pno > plugin.config.questionPerPage){
                             $('li#question' + pno + '.question').prevUntil('li#question'+ (pno-1 - plugin.config.questionPerPage) +'.question').show();
-                            $('a#question'+ pno + '.qnbutton').prevUntil('a#question'+ (pno-1 - plugin.config.questionPerPage) +
+                            $('a#navquestion'+ pno + '.qnbutton').prevUntil('a#navquestion'+ (pno-1 - plugin.config.questionPerPage) +
                              '.qnbutton').addClass("thispage");//paging button highlight
 
                         }else{
                             $('li#question' + pno + '.question').prevAll(_question).show();
-                            $('a#question' + pno + '.qnbutton').prevAll('.qnbutton').addClass("thispage");;
+                            $('a#navquestion' + pno + '.qnbutton').prevAll('.qnbutton').addClass("thispage");;
                         }
                         
                         //$('li#question' + sindx +'.question').nextUntil('li#question' + eindx +'.question').show();
@@ -717,16 +717,16 @@
                         
                         $('li#question0'+ _question).hide();
                         $('li#question0').nextAll(_question).hide();
-                        $('a#question0.qnbutton').nextAll('.qnbutton').removeClass("thispage");//remove button highlight
-                        $('a#question0.qnbutton').removeClass("thispage");//remove button highlight
+                        $('a#navquestion0.qnbutton').nextAll('.qnbutton').removeClass("thispage");//remove button highlight
+                        $('a#navquestion0.qnbutton').removeClass("thispage");//remove button highlight
                         
                         if(sqn0 >= plugin.config.questionPerPage){
                             $('li#question' + (sqn0-1) + '.question').nextUntil('li#question'+ eqn0 +'.question').show();
-                            $('a#question' + (sqn0-1) + '.qnbutton').nextUntil('a#question'+ eqn0 + '.qnbutton').addClass("thispage");//highlight button
+                            $('a#navquestion' + (sqn0-1) + '.qnbutton').nextUntil('a#navquestion'+ eqn0 + '.qnbutton').addClass("thispage");//highlight button
                         }else{
                             $('li#question0.question').nextUntil('li#question'+ (plugin.config.questionPerPage) + '.question').show();
-                            $('a#question0.qnbutton').addClass("thispage");
-                            $('a#question0.qnbutton').nextUntil('a#question'+ (plugin.config.questionPerPage) + '.qnbutton').addClass("thispage");//highlight button
+                            $('a#navquestion0.qnbutton').addClass("thispage");
+                            $('a#navquestion0.qnbutton').nextUntil('a#navquestion'+ (plugin.config.questionPerPage) + '.qnbutton').addClass("thispage");//highlight button
                         }
                         window.location.href = currButton.hash;
                         //if (!$('li#question' + (indx-1) +'.question').find(_prevQuestionBtn).show().end().length) kN(key,1).apply (null, []);
@@ -737,11 +737,11 @@
                 } else {
                     // first page
                     $('li#question0').nextAll(_question).hide(); //hide questions
-                    $('a#question0.qnbutton').nextAll('.qnbutton').removeClass("thispage");//remove button highlight
+                    $('a#navquestion0.qnbutton').nextAll('.qnbutton').removeClass("thispage");//remove button highlight
                     $('li#question0.question').show();
                     $('li#question0.question').nextUntil('li#question'+ (plugin.config.questionPerPage) + '.question').show();
-                    $('a#question0.qnbutton').addClass("thispage");
-                    $('a#question0.qnbutton').nextUntil('a#question'+ (plugin.config.questionPerPage) + '.qnbutton').addClass("thispage");//highlight button
+                    $('a#navquestion0.qnbutton').addClass("thispage");
+                    $('a#navquestion0.qnbutton').nextUntil('a#navquestion'+ (plugin.config.questionPerPage) + '.qnbutton').addClass("thispage");//highlight button
                       
                     window.location.href = currButton.hash;
                     }
@@ -755,7 +755,7 @@
             flagQuestion: function(flagButton, options) {
 
                 var currentQuestion = $($(flagButton).parents(_question)[0]);
-                $('a#' + (currentQuestion.attr('id')) + '.qnbutton').toggleClass("trafficlight");
+                $('a#nav' + (currentQuestion.attr('id')) + '.qnbutton').toggleClass("trafficlight");
                 $(flagButton).toggleClass( "flagged" );
                 
             

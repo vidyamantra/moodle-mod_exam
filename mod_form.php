@@ -53,9 +53,11 @@ class mod_exam_mod_form extends moodleform_mod {
         } else {
             $mform->setType('name', PARAM_CLEAN);
         }
+       
         $mform->addRule('name', null, 'required', null, 'client');
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
         $mform->addHelpButton('name', 'examname', 'exam');
+        
 
         // Adding the standard "intro" and "introformat" fields
         $this->add_intro_editor();
@@ -68,11 +70,21 @@ class mod_exam_mod_form extends moodleform_mod {
         $quizoptions = exam_quiz_list();
         if(empty($quizoptions)){
             $quizoptions = "";
-        }        
-        $mform->addElement('select', 'quizid', get_string('selectquiz', 'exam'),$quizoptions);
+        }  
+        
+        
+        $attempt = exam_attempted($this->_instance);
+        //echo $attempt;
+        if($attempt>0){
+            $mform->addElement('select', 'quizid', get_string('selectquiz', 'exam'),$quizoptions,'disabled');
+        }else{
+            $mform->addElement('select', 'quizid', get_string('selectquiz', 'exam'),$quizoptions);
+        }
+        
         $mform->addHelpButton('quizid', 'selectquiz', 'exam');
         $mform->addRule('quizid', get_string('error'), 'required',null, 'client');
-        
+        //$mform->disabledIf('quizid', $attempt, 'neq', 0);
+       
         // Number of questions on each page
         $questionperpage = array('0' => get_string('neverallononepage', 'quiz'));
         $questionperpage[1] = get_string('everyquestion', 'quiz');
@@ -115,5 +127,18 @@ class mod_exam_mod_form extends moodleform_mod {
         //-------------------------------------------------------------------------------
         // add standard buttons, common to all modules
         $this->add_action_buttons();
+    }
+    
+    
+     public function data_preprocessing(&$toform) {
+        if (isset($toform['grade'])) {
+            // Convert to a real number, so we don't get 0.0000.
+            $toform['grade'] = $toform['grade'] + 0;
+        }
+        
+        //$mform = $this->_form;
+        
+        //$mform->addElement('select', 'quizid', get_string('selectquiz', 'exam'),$quizoptions,'disabled');
+        
     }
 }

@@ -49,7 +49,6 @@ if ($id) {
 require_login($course, true, $cm);
 $context = context_module::instance($cm->id);
 
-//add_to_log($course->id, 'exam', 'view', "view.php?id={$cm->id}", $exam->name, $cm->id);
 // Log this request.
 $params = array(
     'objectid' => $exam->id,
@@ -89,9 +88,13 @@ if ($quizobj->is_preview_user()) {
 }
 
 // Check capabilities.
-if (!$quizobj->is_preview_user()) {
+/*if (!$quizobj->is_preview_user()) {
     $quizobj->require_capability('mod/quiz:attempt');
-}   
+}  */
+// Check capabilities.
+if(!has_capability('mod/exam:attempt', $context) && !has_capability('mod/exam:preview', $context) ){
+    print_error('donothatvepermissiontoattempt', 'exam');
+}
 // Quiz Json object 
 $quizjson = exam_get_examdata($exam,$quizobj);
 

@@ -88,7 +88,12 @@ function exam_user_attempts($examid, $userid = null) {
    return $attempts;
 }*/
 
- 
+ function exam_attempted($examid) {
+   global $CFG ,$DB;
+
+   $attempts= $DB->count_records('exam_grades',array('examid'=>$examid));
+   return $attempts;
+}
 /**
  * Return list of all quiz
  *
