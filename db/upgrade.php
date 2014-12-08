@@ -28,3 +28,25 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
+/**
+ * Execute exam upgrade from the given old version
+ *
+ * @param int $oldversion
+ * @return bool
+ */
+function xmldb_exam_upgrade($oldversion) {
+    global $DB;
+
+    $dbman = $DB->get_manager(); // loads ddl manager and xmldb classes
+
+     if ($oldversion < 2014120800) {
+
+        // insert here code to perform some actions (same as in install.php)
+
+        upgrade_mod_savepoint(true, 2014120800, 'exam');
+    }
+
+ 
+    // Final return of upgrade result (true, all went good) to Moodle.
+    return true;
+}
