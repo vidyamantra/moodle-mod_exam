@@ -106,10 +106,10 @@ $grade =exam_get_user_grades($exam, $USER->id);
 if(($exam->attempts == 0) || $attempted_attempt < $exam->attempts) {
     echo $OUTPUT->single_button(new moodle_url('/mod/exam/attempt.php?id='.$id, array('id' => $id)), get_string('attemptexamnow', 'exam'));
     if($attempted_attempt >0){
-        echo $OUTPUT->heading(quiz_get_grading_option_name($exam->grademethod) .' grade : '. $grade[$USER->id]->rawgrade. ' / ' .$exam->grade);
+        echo $OUTPUT->heading(quiz_get_grading_option_name($exam->grademethod) .' grade : '. number_format($grade[$USER->id]->rawgrade, 2). ' / ' .number_format($exam->grade, 2));
     }
 }else{  
-    echo $OUTPUT->heading(get_string('yourfinalgradeis', 'exam', round($grade[$USER->id]->rawgrade, 2)). round($exam->grade,2));
+    echo $OUTPUT->heading(get_string('yourfinalgradeis', 'exam', number_format($grade[$USER->id]->rawgrade, 2)). number_format($exam->grade,2));
     echo $output = html_writer::tag('p', get_string('nomoreattempts', 'quiz'));         
 }
 // Finish the page

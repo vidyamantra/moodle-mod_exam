@@ -25,7 +25,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-// Replace exam with the name of your module and remove this line.
+
 
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/lib.php');
@@ -36,9 +36,15 @@ $course = $DB->get_record('course', array('id' => $id), '*', MUST_EXIST);
 
 require_course_login($course);
 
-add_to_log($course->id, 'exam', 'view all', 'index.php?id='.$course->id, '');
-
 $coursecontext = context_course::instance($course->id);
+
+$params = array(
+    'context' => $coursecontext
+);
+$event = \mod_exam\event\course_module_instance_list_viewed::create($params);
+$event->trigger();
+
+
 
 $PAGE->set_url('/mod/exam/index.php', array('id' => $id));
 $PAGE->set_title(format_string($course->fullname));

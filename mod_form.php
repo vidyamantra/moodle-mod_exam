@@ -41,6 +41,7 @@ class mod_exam_mod_form extends moodleform_mod {
     public function definition() {
 
         $mform = $this->_form;
+        global $COURSE;
         
         //-------------------------------------------------------------------------------
         // Adding the "general" fieldset, where all the common settings are showed
@@ -70,20 +71,28 @@ class mod_exam_mod_form extends moodleform_mod {
         $quizoptions = exam_quiz_list();
         if(empty($quizoptions)){
             $quizoptions = "";
+            
+            //Quiz link
+            $strobj = new stdClass();
+            $strobj->cid = $COURSE->id;
+            $strobj->section =  optional_param('section', 0, PARAM_INT);
+            $mform->addElement('static', 'description', "", get_string('noquiz', 'exam', $strobj));    
+
         }  
+
+        $attempt =0;
+        if(!empty($this->_instance)){
+        	$attempt = exam_attempted($this->_instance);
+        }
         
-        
-        $attempt = exam_attempted($this->_instance);
-        //echo $attempt;
         if($attempt>0){
             $mform->addElement('select', 'quizid', get_string('selectquiz', 'exam'),$quizoptions,'disabled');
         }else{
             $mform->addElement('select', 'quizid', get_string('selectquiz', 'exam'),$quizoptions);
-        }
-        
+            $mform->addRule('quizid', get_string('error'), 'required',null, 'client');
+        }       
         $mform->addHelpButton('quizid', 'selectquiz', 'exam');
-        $mform->addRule('quizid', get_string('error'), 'required',null, 'client');
-        //$mform->disabledIf('quizid', $attempt, 'neq', 0);
+        
        
         // Number of questions on each page
         $questionperpage = array('0' => get_string('neverallononepage', 'quiz'));
@@ -105,14 +114,12 @@ class mod_exam_mod_form extends moodleform_mod {
         }
         $mform->addElement('select', 'attempts', get_string('attemptsallowed', 'quiz'),
                 $attemptoptions);
-        //$mform->setDefault('attempts', 0);
         
         // Grading method.
         $gradeoptions = array(1 => "Highest grade", 2 => "Average grade", 3 => "First attempt", 4 => "Last attempt");
         $mform->addElement('select', 'grademethod', get_string('grademethod', 'quiz'),
                 $gradeoptions);
         $mform->addHelpButton('grademethod', 'grademethod', 'quiz');
-        //$mform->setAdvanced('grademethod', $quizconfig->grademethod_adv);
         $mform->setDefault('grademethod', 1);
         $mform->disabledIf('grademethod', 'attempts', 'eq', 1);
         
@@ -134,11 +141,6 @@ class mod_exam_mod_form extends moodleform_mod {
         if (isset($toform['grade'])) {
             // Convert to a real number, so we don't get 0.0000.
             $toform['grade'] = $toform['grade'] + 0;
-        }
-        
-        //$mform = $this->_form;
-        
-        //$mform->addElement('select', 'quizid', get_string('selectquiz', 'exam'),$quizoptions,'disabled');
-        
+        }        
     }
 }
