@@ -24,26 +24,24 @@
 
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once($CFG->dirroot.'/mod/exam/lib.php');
+$examid  = optional_param('examid', 0, PARAM_INT);
+$score  = optional_param('score', 0, PARAM_INT);
 
-global $DB, $USER;
-
-if($_POST['examid']){
-    $examid = $_POST['examid'] ? $_POST['examid']: 0;
-    $score = $_POST['score'] ? $_POST['score'] : 0;
-    echo $examid ."   ".$score;
+// Save score in exam grade table
+// And update gradebook.
+if($examid ){
     $record = new stdclass();
     $record->examid = $examid;
     $record->userid = $USER->id;
     $record->grade = $score;
     $record->attempttime = time();
     $returnid = $DB->insert_record('exam_grades', $record);
-
-    $exam = $DB->get_record('exam', array('id' => $examid));
-    exam_update_grades($exam, $USER->id);
     if($returnid){
-        echo "recored saved";
+        $exam = $DB->get_record('exam', array('id' => $examid));
+        exam_update_grades($exam, $USER->id);
     }else{
-        echo "Result not saved";
+        print_error('resultnotsaved');
     }
+}else{
+    print_error('invalidexamid');
 }
-//redirect('view.php?id='.$id);

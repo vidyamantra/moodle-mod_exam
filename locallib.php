@@ -34,7 +34,7 @@ defined('MOODLE_INTERNAL') || die();
  *
  * @since Moodle 2.7
  * @param object $exam instance of exam
- * @param object $quiz instance of quiz
+ * @param object $quizobj instance of quiz
  * @return stdClass Subscription record from DB
  * @throws moodle_exception for an invalid id
  */
@@ -48,26 +48,34 @@ function exam_get_examdata($exam,$quizobj) {
     if (empty($quizjson)) {
         $quizobj->preload_questions();
         $quizobj->load_questions();
-        
-       /* $info = array ("exam" => $exam->id, "name" => $quizobj->get_quiz()->name,
-        "main" => "Add some heading for your quiz", "results" => $exam->grade);*/
+
+
         $info = array ("exam" => $exam->id, "name" => "",
         "main" => "", "results" => $exam->grade);
-        foreach ($quizobj->get_questions() as $questiondata) {
+        foreach ($quizobj->get_questions() as $questiondata) { //echo '<pre>';print_r($questiondata);exit;
             $options = array();
-            if ($questiondata->qtype == 'multichoice') {  
-                foreach($questiondata->options->answers as $ans) { 
+            $select_any = true;
+            $force_checkbox = false;
+            if ($questiondata->qtype == 'multichoice') {
+                foreach($questiondata->options->answers as $ans) {
                     $correct = false;
-                    if($ans->fraction > 0) { 
-                        $correct = true;
+                    // Get score if 100% answer correct if only one answer allowed
+                    $correct = $ans->fraction > 0.9 ? true : false;
+                    if($questiondata->options->single < 1) {
+                        $select_any = false;
+                        $force_checkbox = true;
+                        // Get score if all option selected in multiple answer
+                        $correct = $ans->fraction > 0 ? true : false;
                     }
                     $answer = exam_formate_text($questiondata,$ans->answer,$ans->answerformat,'question', 'answer', $ans->id);
                     $options[] = array("option" => $answer, "correct" => $correct);
-                }        
+                }
                 $questiontext = exam_formate_text($questiondata, $questiondata->questiontext, $questiondata->questiontextformat,'question', 'questiontext', $questiondata->id);
                 $questions[] = array("q" => $questiontext ,"a" => $options,
                 "correct" => $questiondata->options->correctfeedback ? $questiondata->options->correctfeedback : "Your answer is correct.",
-                "incorrect" => $questiondata->options->incorrectfeedback ? $questiondata->options->incorrectfeedback: "Your answer is incorrect.");
+                "incorrect" => $questiondata->options->incorrectfeedback ? $questiondata->options->incorrectfeedback: "Your answer is incorrect.",
+                "select_any" => $select_any,
+                "force_checkbox" => $force_checkbox);
             }
         }
         $qjson = array("info" => $info, "questions" => $questions);
@@ -78,17 +86,14 @@ function exam_get_examdata($exam,$quizobj) {
     return $quizjson;
 }
 
-/*
-function exam_user_attempts($examid, $userid = null) {
-   global $USER, $CFG ,$DB;
-   if(!$userid){
-       $userid = $USER->id;
-   }
-   $attempts= $DB->count_records('exam_grades',array('examid'=>$examid, 'userid'=>$userid));
-   return $attempts;
-}*/
-
- function exam_attempted($examid) {
+/**
+ * Check if exam already attempted
+ * you can not chage question/quiz of exam
+ *
+ * @param int $examid
+ * @return int
+ */
+function exam_attempted($examid) {
    global $CFG ,$DB;
 
    $attempts= $DB->count_records('exam_grades',array('examid'=>$examid));
@@ -105,18 +110,3 @@ function exam_quiz_list(int $courseid=null) {
    $quizs= $DB->get_records_menu('quiz',array('course'=>$COURSE->id),null,'id,name');
    return $quizs;
 }
-
-
-
-/**
- * @return array int => lang string the options for calculating the quiz grade
- *      from the individual attempt grades.
- */
-/*function quiz_get_grading_options() {
-    return array(
-        QUIZ_GRADEHIGHEST => get_string('gradehighest', 'quiz'),
-        QUIZ_GRADEAVERAGE => get_string('gradeaverage', 'quiz'),
-        QUIZ_ATTEMPTFIRST => get_string('attemptfirst', 'quiz'),
-        QUIZ_ATTEMPTLAST  => get_string('attemptlast', 'quiz')
-    );
-}*/
