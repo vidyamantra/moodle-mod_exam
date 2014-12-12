@@ -31,7 +31,9 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['modulename'] = 'Exam';
 $string['modulenameplural'] = 'exam';
-$string['modulename_help'] = 'The exam module allows users to take exam of multiple choice question based on selected quiz.';
+$string['modulename_help'] = 'The exam module allows users to take exam of multiple choice question based on selected quiz.
+<br><br>Security concern<br>
+This Module contains some javaScript code in browser.';
 
 $string['attemptallowed'] = 'Attempts allowed: {$a}';
 $string['attempted'] = 'Attempted: {$a}';

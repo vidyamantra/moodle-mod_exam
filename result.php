@@ -24,7 +24,7 @@
 
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once($CFG->dirroot.'/mod/exam/lib.php');
-$examid  = optional_param('examid', 0, PARAM_INT);
+$examid  = required_param('examid', 0, PARAM_INT);
 $score  = optional_param('score', 0, PARAM_INT);
 
 // Save score in exam grade table
