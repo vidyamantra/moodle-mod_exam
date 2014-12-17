@@ -19,16 +19,15 @@
  *
  * @package   mod_exam
  * @category  grade
- * @copyright 2011 Your Name
+ * @copyright 2014 Pinky Sharma
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-//require_once(__DIR__ . "../../config.php");
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 
 $id = required_param('id', PARAM_INT);          // Course module ID
 $itemnumber = optional_param('itemnumber', 0, PARAM_INT); // Item number, may be != 0 for activities that allow more than one grade per user
-$userid = optional_param('userid', 0, PARAM_INT); // Graded user ID (optional)
+$userid = optional_param('userid', 0, PARAM_INT); // Graded user ID (optional).
 
 if ($id) {
     if (!$cm = get_coursemodule_from_id('exam', $id)) {
@@ -53,37 +52,49 @@ if ($id) {
     }
 }
 
-
-
 require_login($course, false, $cm);
 $context = context_module::instance($cm->id);
 $PAGE->set_pagelayout('report');
-$PAGE->set_url('/mod/exam/grade.php', array('id' => $cm->id));
+$PAGE->set_url('/mod/exam/grade.php', array('id' => $cm->id, 'userid' => $userid));
 $PAGE->set_title(format_string($exam->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($context);
-$PAGE->navbar->add(get_string('grade'), new moodle_url('/mod/exam/grade.php', array('id' => $cm->id) ));
+$PAGE->navbar->add(get_string('grade'), new moodle_url('/mod/exam/grade.php', array('id' => $cm->id , 'userid' => $userid) ));
 
-$params = array("examid" => $exam->id);
-$sql = "SELECT g.id, u.id AS userid, u.firstname, 
+$params = array("examid" => $exam->id, "userid" => $userid);
+
+    $sql = "SELECT g.id, u.id AS userid, u.firstname,
             u.lastname, u.email, g.grade AS rawgrade,
-            g.attempttime           
+            g.attempttime
             FROM {user} u, {exam_grades} g
             WHERE u.id = g.userid AND g.examid = :examid";
-            
-$result = $DB->get_records_sql($sql, $params);     
-// Output starts here
+
+if($userid){
+     $user =  " AND u.id = :userid" ;
+     $sql = $sql . $user;
+} 
+
+$result = $DB->get_records_sql($sql, $params);
+if($userid && $userid == $USER->id && empty($result)){
+    redirect('view.php?id='.$cm->id);
+}
+
+// Output starts here.
 echo $OUTPUT->header();
 
 echo html_writer::start_tag('div');
     echo html_writer::start_tag('div', array('class' => 'no-overflow'));
-        $table = new html_table();
-            $table->head = array('Name', 'Email', 'Attempted', 'Grade');
-            foreach ($result as $gobject){
-                $name = $gobject->firstname ." ".$gobject->lastname;
-                $table->data[] = array($name, $gobject->email, userdate($gobject->attempttime), $gobject->rawgrade);
-            }
-        echo html_writer::table($table);
+        if (has_capability('mod/exam:addinstance', context_module::instance($cm->id)) && empty($result)){
+            echo "Nothing to display.";
+        } else {
+            $table = new html_table();
+                $table->head = array('Name', 'Email', 'Attempted', 'Grade');
+                foreach ($result as $gobject) {
+                    $name = $gobject->firstname ." ".$gobject->lastname;
+                    $table->data[] = array($name, $gobject->email, userdate($gobject->attempttime), $gobject->rawgrade);
+                }
+            echo html_writer::table($table);
+        }
     echo html_writer::end_tag('div');
 echo html_writer::end_tag('div');
 

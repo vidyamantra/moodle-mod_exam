@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -25,7 +24,7 @@
  */
 
 // Disable moodle specific debug messages and any errors in output.
-//define('NO_DEBUG_DISPLAY', true);
+// define('NO_DEBUG_DISPLAY', true);
 
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once($CFG->dirroot . '/mod/exam/lib.php');

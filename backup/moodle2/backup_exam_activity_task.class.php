@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -56,15 +55,15 @@ class backup_exam_activity_task extends backup_activity_task {
     static public function encode_content_links($content) {
         global $CFG;
 
-        $base = preg_quote($CFG->wwwroot,"/");
+        $base = preg_quote($CFG->wwwroot, "/");
 
-        // Link to the list of exams
-        $search="/(".$base."\/mod\/exam\/index.php\?id\=)([0-9]+)/";
-        $content= preg_replace($search, '$@EXAMINDEX*$2@$', $content);
+        // Link to the list of exams.
+        $search = "/(".$base."\/mod\/exam\/index.php\?id\=)([0-9]+)/";
+        $content = preg_replace($search, '$@EXAMINDEX*$2@$', $content);
 
-        // Link to exam view by moduleid
-        $search="/(".$base."\/mod\/exam\/view.php\?id\=)([0-9]+)/";
-        $content= preg_replace($search, '$@EXAMVIEWBYID*$2@$', $content);
+        // Link to exam view by moduleid.
+        $search = "/(".$base."\/mod\/exam\/view.php\?id\=)([0-9]+)/";
+        $content = preg_replace($search, '$@EXAMVIEWBYID*$2@$', $content);
 
         return $content;
     }

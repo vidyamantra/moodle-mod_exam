@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -31,12 +30,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-/** example constant */
-//define('exam_ULTIMATE_ANSWER', 42);
 
-////////////////////////////////////////////////////////////////////////////////
-// Moodle core API                                                            //
-////////////////////////////////////////////////////////////////////////////////
+// Moodle core API.
+
 
 /**
  * Returns the information on whether the module supports a feature
@@ -57,7 +53,7 @@ function exam_supports($feature) {
         case FEATURE_COMPLETION_TRACKS_VIEWS:
             return true;
         case FEATURE_SHOW_DESCRIPTION:  return true;
-        case FEATURE_USES_QUESTIONS:            return true;
+        case FEATURE_USES_QUESTIONS:    return true;
 
         default:                        return null;
     }
@@ -80,12 +76,12 @@ function exam_add_instance(stdClass $exam, mod_exam_mod_form $mform = null) {
 
     $exam->timecreated = time();
 
-    if(!$exam->grademethod){
+    if (!$exam->grademethod) {
         $exam->grademethod = 1;
     }
-    //print_r($exam);exit;
+
     $examid = $DB->insert_record('exam', $exam);
-    $exam->id =$examid;
+    $exam->id = $examid;
     exam_grade_item_update($exam);
     return $examid;
 }
@@ -106,8 +102,6 @@ function exam_update_instance(stdClass $exam, mod_exam_mod_form $mform = null) {
 
     $exam->timemodified = time();
     $exam->id = $exam->instance;
-   //print_r($exam);exit;
-    # You may have to add extra stuff in here #
 
     $DB->update_record('exam', $exam);
     exam_grade_item_update($exam);
@@ -132,7 +126,7 @@ function exam_delete_instance($id) {
         return false;
     }
 
-    # Delete any dependent records here #
+    // Delete any dependent records.
     $DB->delete_records('exam', array('id' => $exam->id));
     $DB->delete_records('exam_grades', array('id' => $exam->id));
 
@@ -177,7 +171,7 @@ function exam_user_complete($course, $user, $mod, $exam) {
  * @return boolean
  */
 function exam_print_recent_activity($course, $viewfullnames, $timestart) {
-    return false;  //  True if anything was printed, otherwise false
+    return false;  //  True if anything was printed, otherwise false.
 }
 
 /**
@@ -201,7 +195,6 @@ function exam_get_recent_mod_activity(&$activities, &$index, $timestart, $course
 
 /**
  * Prints single activity item prepared by {@see exam_get_recent_mod_activity()}
-
  * @return void
  */
 function exam_print_recent_mod_activity($activity, $courseid, $detail, $modnames, $viewfullnames) {
@@ -229,9 +222,9 @@ function exam_get_extra_capabilities() {
     return array();
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// Gradebook API                                                              //
-////////////////////////////////////////////////////////////////////////////////
+/******************************************************************************
+// Gradebook API                                                             **
+*******************************************************************************
 
 /**
  * Is a given scale used by the instance of exam?
@@ -247,7 +240,6 @@ function exam_get_extra_capabilities() {
 function exam_scale_used($examid, $scaleid) {
     global $DB;
 
-    /** @example */
     if ($scaleid and $DB->record_exists('exam', array('id' => $examid, 'grade' => -$scaleid))) {
         return true;
     } else {
@@ -266,7 +258,6 @@ function exam_scale_used($examid, $scaleid) {
 function exam_scale_used_anywhere($scaleid) {
     global $DB;
 
-    /** @example */
     if ($scaleid and $DB->record_exists('exam', array('grade' => -$scaleid))) {
         return true;
     } else {
@@ -284,12 +275,12 @@ function exam_scale_used_anywhere($scaleid) {
  */
 
 function exam_user_attempts($examid, $userid = null) {
-   global $USER, $CFG ,$DB;
-   if(!$userid){
-       $userid = $USER->id;
-   }
-   $attempts= $DB->count_records('exam_grades',array('examid'=>$examid, 'userid'=>$userid));
-   return $attempts;
+    global $USER, $CFG, $DB;
+    if (!$userid) {
+        $userid = $USER->id;
+    }
+    $attempts = $DB->count_records('exam_grades', array('examid' => $examid, 'userid' => $userid));
+    return $attempts;
 }
 /**
  * Return grade for given user or all users.
@@ -303,7 +294,7 @@ function exam_user_attempts($examid, $userid = null) {
 function exam_get_user_grades($exam, $userid=0) {
     global $CFG, $DB;
 
-    $params = array("examid" => $exam->id,"examid2" => $exam->id);
+    $params = array("examid" => $exam->id, "examid2" => $exam->id);
 
     if (!empty($userid)) {
         $params["userid"] = $userid;
@@ -311,17 +302,15 @@ function exam_get_user_grades($exam, $userid=0) {
         $user = "AND u.id = :userid";
         $fuser = "AND uu.id = :userid2";
         $attempts = exam_user_attempts($exam->id, $userid);
+    } else {
+        $user = "";
+        $fuser = "";
     }
-    else {
-        $user="";
-        $fuser="";
-        
-    }
-    //$attempts = exam_user_attempts($exam->id, $userid);
+    // $attempts = exam_user_attempts($exam->id, $userid);
     if ($exam->attempts != 1) {
         switch ($exam->grademethod) {
             case 1:
-                // Highest grade
+                // Highest grade.
                 $sql = "SELECT u.id, u.id AS userid, MAX(g.grade) AS rawgrade
                         FROM {user} u, {exam_grades} g
                         WHERE u.id = g.userid AND g.examid = :examid
@@ -337,7 +326,7 @@ function exam_get_user_grades($exam, $userid=0) {
                         GROUP BY u.id";
                 break;
             case 3:
-                // First grade
+                // First grade.
                 $firstonly = "SELECT uu.id AS userid, MIN(gg.id) AS firstcompleted
                         FROM {user} uu, {exam_grades} gg
                         WHERE uu.id = gg.userid AND gg.examid = :examid2
@@ -351,7 +340,7 @@ function exam_get_user_grades($exam, $userid=0) {
                         $user";
                 break;
             case 4:
-                // Last grade
+                // Last grade.
                 $lastonly = "SELECT uu.id AS userid, MAX(gg.id) AS lastcompleted
                         FROM {user} uu, {exam_grades} gg
                         WHERE uu.id = gg.userid AND gg.examid = :examid2
@@ -365,14 +354,14 @@ function exam_get_user_grades($exam, $userid=0) {
                         $user";
                 break;
         }
-        //look for grading methods
-    }else{
+        // Look for grading methods.
+    } else {
         unset($params['examid2']);
         unset($params['userid2']);
 
         $sql = "SELECT u.id, u.id AS userid, g.grade AS rawgrade
                   FROM {user} u, {exam_grades} g
-                 WHERE u.id = g.userid AND g.examid = :examid                
+                 WHERE u.id = g.userid AND g.examid = :examid
                        $user";
     }
     return $DB->get_records_sql($sql, $params);
@@ -388,28 +377,27 @@ function exam_get_user_grades($exam, $userid=0) {
  */
 function exam_grade_item_update($exam, $grades=null) {
     global $CFG, $DB;
-    //require_once($CFG->libdir.'/gradelib.php');
-    
-    if (!function_exists('grade_update')) { //workaround for buggy PHP versions
+    // require_once($CFG->libdir.'/gradelib.php');
+
+    if (!function_exists('grade_update')) { // workaround for buggy PHP versions.
         require_once($CFG->libdir.'/gradelib.php');
     }
-        if (!function_exists('grade_update')) { //workaround for buggy PHP versions
+    if (!function_exists('grade_update')) { // workaround for buggy PHP versions.
         echo "not found";exit;
     }
 
     $totalquestion = $DB->count_records('quiz_slots', array('quizid' => $exam->quizid));
-    //$params = array('itemname'=>$exam->name);
-    /** @example */
+    // $params = array('itemname'=>$exam->name);
     $params = array();
     $params['itemname'] = $exam->name;
-    //$params['itemname'] = clean_param($exam->name, PARAM_NOTAGS);
+    // $params['itemname'] = clean_param($exam->name, PARAM_NOTAGS);
     $params['gradetype'] = GRADE_TYPE_VALUE;
-    $params['grademax']  = $exam->grade; //$totalquestion* $exam->marksperquestion;
+    $params['grademax']  = $exam->grade; // $totalquestion* $exam->marksperquestion;
     $params['grademin']  = 0;
-    
-    if ($grades  === 'reset') {
+
+    if ($grades === 'reset') {
         $params['reset'] = true;
-        $grades = NULL;
+        $grades = null;
     }
 
      return grade_update('mod/exam', $exam->course, 'mod', 'exam', $exam->id, 0, $grades, $params);
@@ -429,19 +417,19 @@ function exam_update_grades($exam, $userid = 0, $nullifnone=true) {
     global $CFG, $DB;
     require_once($CFG->libdir.'/gradelib.php');
 
-    if ($exam->grade == 0) { 
+    if ($exam->grade == 0) {
         exam_grade_item_update($exam);
 
-    }else if($grades = exam_get_user_grades($exam, $userid)){
+    } else if ($grades = exam_get_user_grades($exam, $userid)) {
         exam_grade_item_update($exam, $grades);
-        
-    }else if($userid and $nullifnone) {
-        
+
+    } else if ($userid and $nullifnone) {
+
         $grade = new stdclass();
         $grade->userid = $userid;
-        $grade->rawgrade = NULL;
-        exam_grade_item_update($exam,$grade);
-    }else{
+        $grade->rawgrade = null;
+        exam_grade_item_update($exam, $grade);
+    } else {
         exam_grade_item_update($exam);
     }
 }
@@ -454,13 +442,11 @@ function exam_update_grades($exam, $userid = 0, $nullifnone=true) {
  */
 function exam_grade_item_delete($exam) {
     global $CFG;
-
 }
 
-
-////////////////////////////////////////////////////////////////////////////////
-// File API                                                                   //
-////////////////////////////////////////////////////////////////////////////////
+/******************************************************************************
+// File API                                                                  **
+*******************************************************************************
 
 /**
  * Returns the lists of all browsable file areas within the given module context
@@ -512,7 +498,7 @@ function exam_get_file_info($browser, $areas, $course, $cm, $context, $filearea,
  * @param bool $forcedownload whether or not force download
  * @param array $options additional options affecting the file serving
  */
-function exam_pluginfile($course, $cm, $context, $filearea, array $args, $forcedownload, array $options=array()) { 
+function exam_pluginfile($course, $cm, $context, $filearea, array $args, $forcedownload, array $options=array()) {
     global $DB, $CFG;
 
     if ($context->contextlevel != CONTEXT_MODULE) {
@@ -520,8 +506,8 @@ function exam_pluginfile($course, $cm, $context, $filearea, array $args, $forced
     }
 
     require_login($course, true, $cm);
-    
-    if (!$exam = $DB->get_record('exam', array('id'=>$cm->instance))) {
+
+    if (!$exam = $DB->get_record('exam', array('id' => $cm->instance))) {
         return false;
     }
 
@@ -532,7 +518,7 @@ function exam_pluginfile($course, $cm, $context, $filearea, array $args, $forced
     }
 
     $feedbackid = (int)array_shift($args);
-    if (!$feedback = $DB->get_record('quiz_feedback', array('id'=>$feedbackid))) {
+    if (!$feedback = $DB->get_record('quiz_feedback', array('id' => $feedbackid))) {
         return false;
     }
 
@@ -546,7 +532,6 @@ function exam_pluginfile($course, $cm, $context, $filearea, array $args, $forced
 
     send_file_not_found();
 }
-
 
 /**
  * Called via pluginfile.php -> question_pluginfile to serve files belonging to
@@ -566,15 +551,15 @@ function exam_pluginfile($course, $cm, $context, $filearea, array $args, $forced
  * @return bool false if file not found, does not return if found - justsend the file
  */
 function exam_question_pluginfile($course, $context, $component,
-        $filearea, $qubaid, $slot, $args, $forcedownload, array $options=array()) { 
+        $filearea, $qubaid, $slot, $args, $forcedownload, array $options=array()) {
     global $CFG;
     require_once($CFG->dirroot . '/mod/quiz/locallib.php');
 
-    //$attemptobj = quiz_attempt::create_from_usage_id($qubaid);
-    //require_login($attemptobj->get_course(), false, $attemptobj->get_cm());
+    // $attemptobj = quiz_attempt::create_from_usage_id($qubaid);
+    // require_login($attemptobj->get_course(), false, $attemptobj->get_cm());
     list($context, $course, $cm) = get_context_info_array($context->id);
     require_login($course, false, $cm);
-    
+
     $quba = question_engine::load_questions_usage_by_activity($qubaid);
 
     if (!question_has_capability_on($quba->get_question($slot), 'use')) {
@@ -593,7 +578,7 @@ function exam_question_pluginfile($course, $context, $component,
         send_file_not_found();
     }
 
-   /* if ($attemptobj->is_own_attempt() && !$attemptobj->is_finished()) {
+    /* if ($attemptobj->is_own_attempt() && !$attemptobj->is_finished()) {
         // In the middle of an attempt.
         if (!$attemptobj->is_preview_user()) {
             $attemptobj->require_capability('mod/quiz:attempt');
@@ -614,7 +599,6 @@ function exam_question_pluginfile($course, $context, $component,
     $fs = get_file_storage();
     $relativepath = implode('/', $args);
     $fullpath = "/$context->id/$component/$filearea/$relativepath";
-    //var_dump(sha1($fullpath));exit;
     if (!$file = $fs->get_file_by_hash(sha1($fullpath)) or $file->is_directory()) {
         send_file_not_found();
     }
@@ -623,9 +607,9 @@ function exam_question_pluginfile($course, $context, $component,
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-// Navigation API                                                             //
-////////////////////////////////////////////////////////////////////////////////
+/********************************
+// Navigation API
+/********************************
 
 /**
  * Extends the global navigation tree by adding exam nodes if there is a relevant content
@@ -652,28 +636,23 @@ function exam_extend_navigation(navigation_node $navref, stdclass $course, stdcl
 function exam_extend_settings_navigation(settings_navigation $settingsnav, navigation_node $examnode=null) {
 }
 
-
-function exam_file_path($args, $forcedownload, $options /*$contextid,$component,$filearea,$itemid*/){   
+function exam_file_path($args, $forcedownload, $options /*$contextid,$component,$filearea,$itemid*/) {
     global $DB;
     $options = array('preview' => $options);
     $fs = get_file_storage();
     $relativepath = explode('/', $args);
-    //print_r($relativepath);exit;
-    //$fullpath = "/$context->id/$component/$filearea/$relativepath";
-    //var_dump(sha1($fullpath));exit;
-   /* if (!$file = $fs->get_file_by_hash(sha1($fullpath)) or $file->is_directory()) {
+    // $fullpath = "/$context->id/$component/$filearea/$relativepath";
+    /* if (!$file = $fs->get_file_by_hash(sha1($fullpath)) or $file->is_directory()) {
         send_file_not_found();
     }*/
-    $hashpath = $DB->get_field('files', 'pathnamehash', array("contextid"=>$relativepath[1],
-        'component' =>$relativepath[2], 'filearea' => $relativepath[3], 'itemid' => $relativepath[4], 'filename' => $relativepath[5]));
-        
+    $hashpath = $DB->get_field('files', 'pathnamehash', array("contextid" => $relativepath[1],
+        'component' => $relativepath[2], 'filearea' => $relativepath[3], 'itemid' => $relativepath[4], 'filename' => $relativepath[5]));
+
     if (!$file = $fs->get_file_by_hash($hashpath) or $file->is_directory()) {
         send_file_not_found();
     }
-
     send_stored_file($file, 0, 0, $forcedownload, $options);
 }
-
 
 function exam_file_rewrite_pluginfile_urls($text, $file, $contextid, $component, $filearea, $itemid, $filename, array $options=null) {
     global $CFG;
@@ -700,7 +679,7 @@ function exam_file_rewrite_pluginfile_urls($text, $file, $contextid, $component,
     return str_replace('@@PLUGINFILE@@/', $replaceurl, $text);
 }
 
-function exam_formate_text($questiondata,$text,$formate,$component, $filearea,$itemid){
+function exam_formate_text($questiondata, $text, $formate, $component, $filearea, $itemid) {
     global $PAGE, $DB;
 
     $context = context_module::instance($PAGE->cm->id);
@@ -709,17 +688,17 @@ function exam_formate_text($questiondata,$text,$formate,$component, $filearea,$i
             $formate = FORMAT_HTML;
         }
         $pattern = '/src="@@PLUGINFILE@@\/(.*?)"/';
-        preg_match($pattern,$text, $matches);
-        if(!empty($matches)){
+        preg_match($pattern, $text, $matches);
+        if (!empty($matches)) {
             $filename = $matches[1];
             $f = 'mod/exam/pluginfile.php';
             $contents = exam_file_rewrite_pluginfile_urls($text, $f, $questiondata->contextid, $component, $filearea, $itemid, $filename);
-            //$contents =exam_make_html_inline($contents);
-           /* return format_text($contents, $questiondata->questiontextformat,
+            // $contents = exam_make_html_inline($contents);
+            /* return format_text($contents, $questiondata->questiontextformat,
                                    array('context' => $context, 'noclean' => true,
                                          'overflowdiv' => true)); */
             return  exam_make_html_inline($contents);
-    
+
         } else {
             return  exam_make_html_inline($text);
         }

@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -32,14 +31,14 @@ require_once($CFG->dirroot . '/mod/quiz/locallib.php');
 require_once($CFG->libdir . '/completionlib.php');
 require_once($CFG->dirroot . '/mod/exam/locallib.php');
 
-$id = optional_param('id', 0, PARAM_INT); // course_module ID, or
-$n  = optional_param('n', 0, PARAM_INT);  // exam instance ID - it should be named as the first character of the module
+$id = optional_param('id', 0, PARAM_INT); // Course_module ID, or
+$n  = optional_param('n', 0, PARAM_INT);  // Exam instance ID - it should be named as the first character of the module.
 
 if ($id) {
     $cm         = get_coursemodule_from_id('exam', $id, 0, false, MUST_EXIST);
     $course     = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
     $exam  = $DB->get_record('exam', array('id' => $cm->instance), '*', MUST_EXIST);
-} elseif ($n) {
+} else if ($n) {
     $exam  = $DB->get_record('exam', array('id' => $n), '*', MUST_EXIST);
     $course     = $DB->get_record('course', array('id' => $exam->course), '*', MUST_EXIST);
     $cm         = get_coursemodule_from_instance('exam', $exam->id, $course->id, false, MUST_EXIST);
@@ -64,11 +63,11 @@ $event = \mod_exam\event\course_module_viewed::create($params);
 $event->add_record_snapshot('exam', $exam);
 $event->trigger();
 
-//completion
+// Completion.
 $completion = new completion_info($course);
 $completion->set_module_viewed($cm);
 
-/// Print the page header
+// Print the page header.
 $PAGE->set_url('/mod/exam/view.php', array('id' => $cm->id));
 $PAGE->set_title(format_string($exam->name));
 $PAGE->set_heading(format_string($course->fullname));
@@ -84,10 +83,10 @@ if (!$quizobj->has_questions()) {
     }
 }
 
-// Output starts here
+// Output starts here.
 echo $OUTPUT->header();
 echo $OUTPUT->heading($exam->name .' ('. $quizobj->get_quiz()->name.')');
-if ($exam->intro) { // Conditions to show the intro can change to look for own settings or whatever
+if ($exam->intro) { // Conditions to show the intro can change to look for own settings or whatever.
     echo $OUTPUT->box(format_module_intro('exam', $exam, $cm->id), 'generalbox mod_introbox', 'examintro');
 }
 
@@ -97,20 +96,20 @@ $output = html_writer::start_tag('div', array('class' => 'quizinfo'));
 $output .= html_writer::tag('p', get_string('attemptallowed', 'exam', $exam->attempts ? $exam->attempts : 'unlimited'));
 $output .= html_writer::tag('p', get_string('gradingmethod', 'quiz',
             quiz_get_grading_option_name($exam->grademethod)));
-$output .= html_writer::tag('p', get_string('attempted', 'exam',$attempted_attempt));
+$output .= html_writer::tag('p', get_string('attempted', 'exam', $attempted_attempt));
 $output .= html_writer::end_tag('div');
 echo $output;
 
-$grade =exam_get_user_grades($exam, $USER->id);
+$grade = exam_get_user_grades($exam, $USER->id);
 
-if(($exam->attempts == 0) || $attempted_attempt < $exam->attempts) {
+if (($exam->attempts == 0) || $attempted_attempt < $exam->attempts) {
     echo $OUTPUT->single_button(new moodle_url('/mod/exam/attempt.php?id='.$id, array('id' => $id)), get_string('attemptexamnow', 'exam'));
-    if($attempted_attempt >0){
+    if ($attempted_attempt > 0) {
         echo $OUTPUT->heading(quiz_get_grading_option_name($exam->grademethod) .' grade : '. number_format($grade[$USER->id]->rawgrade, 2). ' / ' .number_format($exam->grade, 2));
     }
-}else{  
-    echo $OUTPUT->heading(get_string('yourfinalgradeis', 'exam', number_format($grade[$USER->id]->rawgrade, 2)). number_format($exam->grade,2));
-    echo $output = html_writer::tag('p', get_string('nomoreattempts', 'quiz'));         
+} else {
+    echo $OUTPUT->heading(get_string('yourfinalgradeis', 'exam', number_format($grade[$USER->id]->rawgrade, 2)). number_format($exam->grade, 2));
+    echo $output = html_writer::tag('p', get_string('nomoreattempts', 'quiz'));
 }
-// Finish the page
+// Finish the page.
 echo $OUTPUT->footer();

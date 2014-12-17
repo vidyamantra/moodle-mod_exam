@@ -20,7 +20,7 @@
 //      perQuestionResponseAnswers:true,
 
 (function($){
-    $.slickQuiz = function(element, options) { 
+    $.slickQuiz = function(element, options) {
         var plugin   = this,
             $element = $(element),
             _element = '#' + $element.attr('id'),
@@ -115,9 +115,7 @@
             $quizResultsCopy       = $(_quizResultsCopy),
             $quizHeader            = $(_quizHeader),
             $quizScore             = $(_quizScore),
-            $quizLevel             = $(_quizLevel)
-        ;
-
+            $quizLevel             = $(_quizLevel);
 
         // Reassign user-submitted deprecated options
         var depMsg = '';
@@ -157,12 +155,11 @@
         }
         // End of deprecation reassignment
 
-
         plugin.config = $.extend(defaults, options);
 
         // Set via json option or quizJSON variable (see slickQuiz-config.js)
         var quizValues = (plugin.config.json ? plugin.config.json : typeof quizJSON != 'undefined' ? quizJSON : null);
-		var quizValues = $.parseJSON(quizValues);//added by pinky
+        var quizValues = $.parseJSON(quizValues);//added by pinky
         // Get questions, possibly sorted randomly
         var questions = plugin.config.randomSortQuestions ?
                         quizValues.questions.sort(function() { return (Math.round(Math.random())-0.5); }) :
@@ -170,10 +167,9 @@
 
         // Count the number of questions
         var questionCount = questions.length;
-        
+
         //Set other options from config
         var questionMode = (plugin.config.questionMode ? plugin.config.questionMode : 'deferredfeedback');
-        
 
         // Select X number of questions to load if options is set
         if (plugin.config.numberOfQuestions && questionCount >= plugin.config.numberOfQuestions) {
@@ -237,8 +233,7 @@
                         var question = questions[i];
 
                         var questionHTML = $('<li class="' + questionClass +'" id="question' + (count - 1) + '"></li>');
-                                               
-                        
+
                         if (plugin.config.displayQuestionCount) {
                             questionHTML.append('<div class="' + questionCountClass + '">' +
                                 plugin.config.questionCountText
@@ -322,37 +317,34 @@
                         if (plugin.config.backButtonText && plugin.config.backButtonText !== '') {
                             questionHTML.append('<a href="#" class="button ' + backToQuestionClass + '">' + plugin.config.backButtonText + '</a>');
                         }
-                        
+
                        // If we're not showing responses per question, show next question button and make it check the answer too
                         if (!plugin.config.perQuestionResponseMessaging) {
-                            //questionHTML.append('<a href="#" class="button ' + nextQuestionClass + ' ' + checkAnswerClass + '">' + plugin.config.nextQuestionText + '</a>'); 
+                            //questionHTML.append('<a href="#" class="button ' + nextQuestionClass + ' ' + checkAnswerClass + '">' + plugin.config.nextQuestionText + '</a>');
                         } else {
                             questionHTML.append('<a href="#" class="button ' + nextQuestionClass + '">' + plugin.config.nextQuestionText + '</a>');
                             questionHTML.append('<a href="#" class="button ' + checkAnswerClass + '">' + plugin.config.checkAnswerText + '</a>');
-                            
-                        } 
+                        }
 
-                        
                         if(count == quizValues.questions.length){
                                 questionHTML.append('<a href="#" class="button ' + nextQuestionClass + ' ' + checkAnswerClass + '">' + plugin.config.submitQuestionText + '</a>');
-                         } else if(count == plugin.config.questionPerPage || (count % plugin.config.questionPerPage == 0)){ 
-                                questionHTML.append('<a href="#" class="button ' + nextQuestionClass + '" style = "display: list-item">' + plugin.config.nextQuestionText + '</a>');                              
+                         } else if(count == plugin.config.questionPerPage || (count % plugin.config.questionPerPage == 0)) {
+                                questionHTML.append('<a href="#" class="button ' + nextQuestionClass + '" style = "display: list-item">' + plugin.config.nextQuestionText + '</a>');
                         }
                         //questionHTML.append('<div class="' + questionCountClass + '">&nbsp;</div>');//for next line
-                        
-                        
+
                         if(count <= plugin.config.questionPerPage){ // add perpage question count
                             questionHTML.show();//ToDo next should also be enabled
                             //(_nextQuestionBtn).fadeIn(300, kN(key,1));
-                            var examnav = $(' <a href="#question' + (count - 1) + 
+                            var examnav = $(' <a href="#question' + (count - 1) +
                             '" class="qnbutton notyetanswered free thispage" title="Not yet answered" id="navquestion' +
-                             (count - 1) + '">' + (count) + '</a>');                            
+                             (count - 1) + '">' + (count) + '</a>');
                         }else{
                             var examnav = $(' <a href="#question' + (count - 1) +
                              '" class="qnbutton notyetanswered free" title="Not yet answered" id="navquestion' +
                               (count - 1) + '">' + (count) + '</a>');
-                        }    
-                        $( "div#exam_navblock .content .qn_buttons" ).append(examnav);    
+                        }
+                        $( "div#exam_navblock .content .qn_buttons" ).append(examnav);
                         // Append question & answers to quiz
                         quiz.append(questionHTML);
 
@@ -459,7 +451,6 @@
 
                 answerLIs.addClass(incorrectResponseClass);
 
-                
                 // Collect the true answers needed for a correct response
                 var trueAnswers = [];
                 for (i in answers) {
@@ -468,15 +459,15 @@
                             index  = parseInt(i, 10);
 
                         if (answer.correct) {
-                            trueAnswers.push(index); 
-                                if(plugin.config.questionMode =='interactive'){                         
+                            trueAnswers.push(index);
+                                if(plugin.config.questionMode =='interactive'){
                                  answerLIs.eq(index).removeClass(incorrectResponseClass).addClass(correctResponseClass);
-                                }                                                        
+                                }
                         }else{
                             if($.inArray(index, trueAnswers) > -1){
                                 trueAnswers.pop(index);
                             }
-                            
+
                             answerLIs.eq(index).removeClass('wrong');
                         }
                     }
@@ -519,22 +510,21 @@
                     }
                     $('a#nav' + (questionLI.attr('id')) + '.qnbutton').removeClass('correct').addClass("incorrect");
                 }
-                
+
                 // Toggle appropriate response (either for display now and / or on completion)
                 questionLI.find(_responses + ' li').hide();//hide response if user chance answer
                 questionLI.find(correctResponse ? _correctResponse : _incorrectResponse).show();
 
                 // If perQuestionResponseMessaging is enabled, toggle response and navigation now
-                if (plugin.config.perQuestionResponseMessaging) { 
-                    if(plugin.config.questionMode !='adaptive'){
+                if (plugin.config.perQuestionResponseMessaging) {
+                    if(plugin.config.questionMode != 'adaptive'){
                         $(checkButton).hide();
                         questionLI.find(_answers + ' li input[type=radio]').attr('disabled', true);
                     }
                     if (!plugin.config.perQuestionResponseAnswers) {
                         questionLI.find(_answers).hide();
-                        
                     }
-                    
+
                     questionLI.find(_responses).show();
                     //questionLI.find(_nextQuestionBtn).fadeIn(300, kN(key,1));//pinky
                     //questionLI.find(_prevQuestionBtn).fadeIn(300, kN(key,2));//hide for interactive and adaptive
@@ -565,9 +555,9 @@
                 }
 
                 $('a#navquestion0.qnbutton').removeClass("thispage");//remove paging button highlight for first question
-                $('a#navquestion0.qnbutton').nextAll('.qnbutton').removeClass("thispage");//remove paging button highlighing 
+                $('a#navquestion0.qnbutton').nextAll('.qnbutton').removeClass("thispage");//remove paging button highlighing
                 if (nextQuestion.length) {
-                    currentQuestion.fadeOut(300, function(){  
+                    currentQuestion.fadeOut(300, function(){
                         //code for page(added by pinky)
                         currentQuestion.prevAll(_question).hide();//hide all previous questions
                         if(currentQuestion.nextAll(_question).length > plugin.config.questionPerPage){
@@ -575,16 +565,16 @@
                             // nextuntill not include given value hence 1 added
                             var indx = currentQuestion.prevAll(_question).length + plugin.config.questionPerPage + 1;
                             currentQuestion.nextUntil('li#question' + indx +'.question').show();
-                            $('li#question' + (indx-1) +'.question').find(_prevQuestionBtn).show().end().fadeIn(500, kN(key,1));                          
+                            $('li#question' + (indx-1) +'.question').find(_prevQuestionBtn).show().end().fadeIn(500, kN(key,1));
 
                             $('a#nav'+currentQuestion[0].id+'.qnbutton').nextUntil('a#navquestion'+ indx +
                              '.qnbutton').addClass("thispage");//paging button highlight
-                            
+
                         }else{
-                           currentQuestion.nextAll(_question).show();//display all next questions 
+                           currentQuestion.nextAll(_question).show();//display all next questions
                            if (!$('li#question' + (quizValues.questions.length-1) + 
                            '.question').find(_prevQuestionBtn).show().end().length) kN(key,1).apply (null, []);
-                           
+
                            $('a#nav'+currentQuestion[0].id+'.qnbutton').nextAll('.qnbutton').addClass("thispage"); //paging button highlight
                         }
                         //if (!$('li#question' + (indx-1) +'.question').find(_prevQuestionBtn).show().end().length) kN(key,1).apply (null, []);
@@ -611,11 +601,11 @@
                     answers    = questionLI.find(_answers);
 
                 $('a#navquestion0.qnbutton').removeClass("thispage");//remove paging button highlight for first question
-                $('a#navquestion0.qnbutton').nextAll('.qnbutton').removeClass("thispage");//remove paging button highlighing 
-    
+                $('a#navquestion0.qnbutton').nextAll('.qnbutton').removeClass("thispage");//remove paging button highlighing.
+
                 // Back to previous question
                 if (answers.css('display') === 'block' ) {
-                    var prevQuestion = questionLI.prev(_question); 
+                    var prevQuestion = questionLI.prev(_question);
                     //pinky
                      $('li#question0.question').nextAll(_question).hide();
                     if(questionLI.prevAll(_question).length >= plugin.config.questionPerPage){
@@ -640,14 +630,13 @@
                             $('li#question' + pno + '.question').prevAll(_question).show();
                             $('a#navquestion' + pno + '.qnbutton').prevAll('.qnbutton').addClass("thispage");;
                         }
-                        
+
                         //$('li#question' + sindx +'.question').nextUntil('li#question' + eindx +'.question').show();
                         //$('li#question' + (eindx-1) +'.question').nextAll(_question).hide();
                     }else{
                         questionLI.prevAll(_question).show();
-                    }  
-                    
-                     
+                    }
+
                     questionLI.fadeOut(300, function() {
                         prevQuestion.removeClass(correctClass).removeClass(incorrectClass);
                         prevQuestion.find(_responses + ', ' + _responses + ' li').hide();
@@ -683,12 +672,12 @@
 
                 internal.method.turnKeyAndGo (key, options && options.callback ? options.callback : function () {});
             },
-            
+
             diaplayQuestion: function(currButton, options) {
-            	var key, keyNotch, kN;
-            	key = internal.method.getKey (1); // how many notches == how many jQ animations you will run
-            	keyNotch = internal.method.getKeyNotch; // a function that returns a jQ animation callback function
-            	kN = keyNotch; // you specify the notch, you get a callback function for your animation
+                var key, keyNotch, kN;
+                key = internal.method.getKey (1); // how many notches == how many jQ animations you will run
+                keyNotch = internal.method.getKeyNotch; // a function that returns a jQ animation callback function
+                kN = keyNotch; // you specify the notch, you get a callback function for your animation
 
                 var currentQuestion = $('li'+currButton.hash+'.question'),// $($(nextButton).parents(_question)[0]),
                     nextQuestion    = currentQuestion.next(_question),
@@ -700,12 +689,11 @@
                     return false;
                 }
 //$('li'+currButton.hash+'.question').css('display')
-                var qno =  1 + Number(currButton.id.replace( /^\D+/g, ''));
+                var qno = 1 + Number(currButton.id.replace( /^\D+/g, ''));
                 if (qno >= plugin.config.questionPerPage) {
-                    //currentQuestion.fadeIn(300, function(){  
+                    //currentQuestion.fadeIn(300, function(){
 
                         //code for page(added by pinky)
-                        
                         var remain = (qno) % plugin.config.questionPerPage;
                         if(remain > 0 ){
                             var pno = parseInt(qno / plugin.config.questionPerPage)+1;
@@ -714,19 +702,19 @@
                         }
                         var sqn0 = plugin.config.questionPerPage * (pno-1);
                         var eqn0 = plugin.config.questionPerPage * pno;
-                        
+
                         $('li#question0'+ _question).hide();
                         $('li#question0').nextAll(_question).hide();
                         $('a#navquestion0.qnbutton').nextAll('.qnbutton').removeClass("thispage");//remove button highlight
                         $('a#navquestion0.qnbutton').removeClass("thispage");//remove button highlight
-                        
+
                         if(sqn0 >= plugin.config.questionPerPage){
                             $('li#question' + (sqn0-1) + '.question').nextUntil('li#question'+ eqn0 +'.question').show();
                             $('a#navquestion' + (sqn0-1) + '.qnbutton').nextUntil('a#navquestion'+ eqn0 + '.qnbutton').addClass("thispage");//highlight button
                         }else{
                             $('li#question0.question').nextUntil('li#question'+ (plugin.config.questionPerPage) + '.question').show();
                             $('a#navquestion0.qnbutton').addClass("thispage");
-                            $('a#navquestion0.qnbutton').nextUntil('a#navquestion'+ (plugin.config.questionPerPage) + '.qnbutton').addClass("thispage");//highlight button
+                            $('a#navquestion0.qnbutton').nextUntil('a#navquestion'+ (plugin.config.questionPerPage) + '.qnbutton').addClass("thispage");// highlight button
                         }
                         window.location.href = currButton.hash;
                         //if (!$('li#question' + (indx-1) +'.question').find(_prevQuestionBtn).show().end().length) kN(key,1).apply (null, []);
@@ -742,7 +730,7 @@
                     $('li#question0.question').nextUntil('li#question'+ (plugin.config.questionPerPage) + '.question').show();
                     $('a#navquestion0.qnbutton').addClass("thispage");
                     $('a#navquestion0.qnbutton').nextUntil('a#navquestion'+ (plugin.config.questionPerPage) + '.qnbutton').addClass("thispage");//highlight button
-                      
+
                     window.location.href = currButton.hash;
                     }
               /*else {
@@ -757,8 +745,6 @@
                 var currentQuestion = $($(flagButton).parents(_question)[0]);
                 $('a#nav' + (currentQuestion.attr('id')) + '.qnbutton').toggleClass("trafficlight");
                 $(flagButton).toggleClass( "flagged" );
-                
-            
             },
 
             // Hides all questions, displays the final score and some conclusive information
@@ -768,7 +754,7 @@
             	keyNotch = internal.method.getKeyNotch; // a function that returns a jQ animation callback function
             	kN = keyNotch; // you specify the notch, you get a callback function for your animation
 
-                var marksPerQust = (Number(quizValues.info.results)/questionCount).toFixed(3);
+                var marksPerQust = (Number(quizValues.info.results) / questionCount).toFixed(3);
                 var score = $(_element + ' ' + _correct).length;
                 score = score * marksPerQust;
 
@@ -798,9 +784,9 @@
                     $(_quizLevel).addClass('level' + levelRank);
                 }
 
-                $quizArea.fadeOut(300, function() { 
+                $quizArea.fadeOut(300, function() {
                     // If response messaging is set to show upon quiz completion, show it now
-                    if (plugin.config.completionResponseMessaging) { 
+                    if (plugin.config.completionResponseMessaging) {
                         $(_element + ' ' + '.qnbutton').addClass('show'); //diapley navigation bar
                         $(_element + ' input').prop('disabled', true);
                         $(_element + ' .button:not(' + _tryAgainBtn + '), ' + _element + ' ' + _questionCount).hide();
@@ -896,15 +882,15 @@
                 e.preventDefault();
                 plugin.method.checkAnswer(this, {callback: plugin.config.animationCallbacks.checkAnswer});
             });
-            
+
             // Bind "answer" buttons( 'deferredfeedback')
             if(!plugin.config.perQuestionResponseMessaging){
-                $(_element + ' ' + '.ansck').on('click', function(e) { 
+                $(_element + ' ' + '.ansck').on('click', function(e) {
                     //e.preventDefault();
                     plugin.method.checkAnswer(this, {callback: plugin.config.animationCallbacks.checkAnswer});
                 });
             }
-            
+
             // Bind "finised" buttons( 'deferredfeedback')
            /* $('#slickQuiz .quizResults .finished').on('click', function(e) {
                 //e.preventDefault();
@@ -918,11 +904,11 @@
                     plugin.method.diaplayQuestion(this, {callback: plugin.config.animationCallbacks.diaplayQuestion});
                 }else{
                     window.location.href = this.hash;
-                }                
+                }
             });
-            $(_element + ' .quesname span.unflagged').on('click', function(e) { 
+            $(_element + ' .quesname span.unflagged').on('click', function(e) {
                 e.preventDefault();
-                plugin.method.flagQuestion(this, {callback: plugin.config.animationCallbacks.flagQuestion});           
+                plugin.method.flagQuestion(this, {callback: plugin.config.animationCallbacks.flagQuestion});
             });
 
             // Bind "back" buttons
@@ -932,7 +918,7 @@
             });
 
             // Bind "next" buttons
-            $(_element + ' ' + _nextQuestionBtn).on('click', function(e) { 
+            $(_element + ' ' + _nextQuestionBtn).on('click', function(e) {
                 e.preventDefault();
                 plugin.method.nextQuestion(this, {callback: plugin.config.animationCallbacks.nextQuestion});
             });

@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -41,59 +40,55 @@ class mod_exam_mod_form extends moodleform_mod {
     public function definition() {
 
         $mform = $this->_form;
-        global $COURSE;
-        
-        //-------------------------------------------------------------------------------
-        // Adding the "general" fieldset, where all the common settings are showed
+        global $COURSE, $CFG;
+
+        // ------------------------------------------------------------------------
+        // Adding the "general" fieldset, where all the common settings are showed.
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
-        // Adding the standard "name" field
-        $mform->addElement('text', 'name', get_string('examname', 'exam'), array('size'=>'64'));
+        // Adding the standard "name" field.
+        $mform->addElement('text', 'name', get_string('examname', 'exam'), array('size' => '64'));
         if (!empty($CFG->formatstringstriptags)) {
             $mform->setType('name', PARAM_TEXT);
         } else {
             $mform->setType('name', PARAM_CLEAN);
         }
-       
+
         $mform->addRule('name', null, 'required', null, 'client');
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
-        
 
-        // Adding the standard "intro" and "introformat" fields
+        // Adding the standard "intro" and "introformat" fields.
         $this->add_intro_editor();
 
-        //-------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------
         // Adding the rest of exam settings, spreeading all them into this fieldset
-        // or adding more fieldsets ('header' elements) if needed for better logic
-        
-        
+        // or adding more fieldsets ('header' elements) if needed for better logic.
+
         $quizoptions = exam_quiz_list();
-        if(empty($quizoptions)){
+        if (empty($quizoptions)) {
             $quizoptions = "";
-            
-            //Quiz link
+
+            // Quiz link.
             $strobj = new stdClass();
             $strobj->cid = $COURSE->id;
-            $strobj->section =  optional_param('section', 0, PARAM_INT);
-            $mform->addElement('static', 'description', "", get_string('noquiz', 'exam', $strobj));    
-
-        }  
-
-        $attempt =0;
-        if(!empty($this->_instance)){
-        	$attempt = exam_attempted($this->_instance);
+            $strobj->section = optional_param('section', 0, PARAM_INT);
+            $mform->addElement('static', 'description', "", get_string('noquiz', 'exam', $strobj));
         }
-        
-        if($attempt>0){
-            $mform->addElement('select', 'quizid', get_string('selectquiz', 'exam'),$quizoptions,'disabled');
-        }else{
-            $mform->addElement('select', 'quizid', get_string('selectquiz', 'exam'),$quizoptions);
-            $mform->addRule('quizid', get_string('error'), 'required',null, 'client');
-        }       
+
+        $attempt = 0;
+        if (!empty($this->_instance)) {
+            $attempt = exam_attempted($this->_instance);
+        }
+
+        if ($attempt > 0) {
+            $mform->addElement('select', 'quizid', get_string('selectquiz', 'exam'), $quizoptions, 'disabled');
+        } else {
+            $mform->addElement('select', 'quizid', get_string('selectquiz', 'exam'), $quizoptions);
+            $mform->addRule('quizid', get_string('error'), 'required', null, 'client');
+        }
         $mform->addHelpButton('quizid', 'selectquiz', 'exam');
-        
-       
-        // Number of questions on each page
+
+        // Number of questions on each page.
         $questionperpage = array('0' => get_string('neverallononepage', 'quiz'));
         $questionperpage[1] = get_string('everyquestion', 'quiz');
         for ($i = 2; $i <= 50; $i++) {
@@ -102,9 +97,7 @@ class mod_exam_mod_form extends moodleform_mod {
         $mform->addElement('select', 'questionperpage', get_string('questionperpage', 'exam'),
                 $questionperpage);
         $mform->setDefault('questionperpage', 10);
-        
-        
-        
+
         $mform->addElement('header', 'examfieldset', get_string('gradeset', 'exam'));
         // Number of attempts.
         $attemptoptions = array('0' => get_string('unlimited'));
@@ -113,7 +106,7 @@ class mod_exam_mod_form extends moodleform_mod {
         }
         $mform->addElement('select', 'attempts', get_string('attemptsallowed', 'quiz'),
                 $attemptoptions);
-        
+
         // Grading method.
         $gradeoptions = array(1 => "Highest grade", 2 => "Average grade", 3 => "First attempt", 4 => "Last attempt");
         $mform->addElement('select', 'grademethod', get_string('grademethod', 'quiz'),
@@ -121,25 +114,24 @@ class mod_exam_mod_form extends moodleform_mod {
         $mform->addHelpButton('grademethod', 'grademethod', 'quiz');
         $mform->setDefault('grademethod', 1);
         $mform->disabledIf('grademethod', 'attempts', 'eq', 1);
-        
+
         // Maximum points.
         $mform->addElement('text', 'grade', get_string('maxpoint', 'exam'));
         $mform->setType('grade', PARAM_INT);
         $mform->setDefault('grade', 100);
 
-        //-------------------------------------------------------------------------------
-        // add standard elements, common to all modules
+        // -------------------------------------------------------------------------------
+        // Add standard elements, common to all modules.
         $this->standard_coursemodule_elements();
-        //-------------------------------------------------------------------------------
-        // add standard buttons, common to all modules
+        // -------------------------------------------------------------------------------
+        // Add standard buttons, common to all modules.
         $this->add_action_buttons();
     }
-    
-    
-     public function data_preprocessing(&$toform) {
+
+    public function data_preprocessing(&$toform) {
         if (isset($toform['grade'])) {
             // Convert to a real number, so we don't get 0.0000.
             $toform['grade'] = $toform['grade'] + 0;
-        }        
+        }
     }
 }

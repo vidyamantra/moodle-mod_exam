@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -41,7 +40,7 @@ class restore_exam_activity_structure_step extends restore_activity_structure_st
             $paths[] = new restore_path_element('exam_grade', '/activity/exam/grades/grade');
         }
 
-        // Return the paths wrapped into standard activity structure
+        // Return the paths wrapped into standard activity structure.
         return $this->prepare_activity_structure($paths);
     }
 
@@ -50,29 +49,27 @@ class restore_exam_activity_structure_step extends restore_activity_structure_st
 
         $data = (object)$data;
         $oldid = $data->id;
-        $oldcourseid = $data->course;//save original course id
-        $oldquizid = $data->quizid; //save original quiz id
+        $oldcourseid = $data->course; // Save original course id.
+        $oldquizid = $data->quizid; // Save original quiz id.
         $data->course = $this->get_courseid();
-        
+
         // In same couse mapped quiz id missing
-        // This is for course restore
-        $data->quizid = $this->get_mappingid('quiz', $data->quizid); 
+        // This is for course restore.
+        $data->quizid = $this->get_mappingid('quiz', $data->quizid);
         // Workround for module restor in same course
-        // In other course quizid blank if dependent quiz not restored
-        if(empty($data->quizid) && ($oldcourseid==$data->course)){
+        // In other course quizid blank if dependent quiz not restored.
+        if (empty($data->quizid) && ($oldcourseid == $data->course)) {
             $data->quizid = $oldquizid;
         }
 
         $data->timecreated = $this->apply_date_offset($data->timecreated);
         $data->timemodified = $this->apply_date_offset($data->timemodified);
 
-        // insert the exam record
+        // Insert the exam record.
         $newitemid = $DB->insert_record('exam', $data);
-        // immediately after inserting "activity" record, call this
+        // Immediately after inserting "activity" record, call this.
         $this->apply_activity_instance($newitemid);
-        
     }
-
 
     protected function process_exam_grade($data) {
         global $DB;
@@ -85,11 +82,11 @@ class restore_exam_activity_structure_step extends restore_activity_structure_st
 
         $newitemid = $DB->insert_record('exam_grades', $data);
         // No need to save this mapping as far as nothing depend on it
-        // (child paths, file areas nor links decoder)
+        // (child paths, file areas nor links decoder).
     }
 
     protected function after_execute() {
-        // Add exam related files, no need to match by itemname (just internally handled context)
+        // Add exam related files, no need to match by itemname (just internally handled context).
         $this->add_related_files('mod_exam', 'intro', null);
     }
 }

@@ -37,16 +37,12 @@ defined('MOODLE_INTERNAL') || die();
 function xmldb_exam_upgrade($oldversion) {
     global $DB;
 
-    $dbman = $DB->get_manager(); // loads ddl manager and xmldb classes
+    $dbman = $DB->get_manager(); // Loads ddl manager and xmldb classes.
 
-     if ($oldversion < 2014120800) {
-
-        // insert here code to perform some actions (same as in install.php)
+    if ($oldversion < 2014120800) {
 
         upgrade_mod_savepoint(true, 2014120800, 'exam');
     }
-
- 
     // Final return of upgrade result (true, all went good) to Moodle.
     return true;
 }

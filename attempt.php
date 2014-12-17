@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -31,14 +30,14 @@ require_once(dirname(__FILE__).'/lib.php');
 require_once($CFG->dirroot . '/mod/quiz/locallib.php');
 require_once($CFG->dirroot . '/mod/exam/locallib.php');
 
-$id = optional_param('id', 0, PARAM_INT); // course_module ID, or
-$n  = optional_param('n', 0, PARAM_INT);  // exam instance ID - it should be named as the first character of the module
+$id = optional_param('id', 0, PARAM_INT); // Course_module ID, or
+$n  = optional_param('n', 0, PARAM_INT); // Exam instance ID - it should be named as the first character of the module.
 
 if ($id) {
     $cm         = get_coursemodule_from_id('exam', $id, 0, false, MUST_EXIST);
     $course     = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
     $exam  = $DB->get_record('exam', array('id' => $cm->instance), '*', MUST_EXIST);
-} elseif ($n) {
+} else if ($n) {
     $exam  = $DB->get_record('exam', array('id' => $n), '*', MUST_EXIST);
     $course     = $DB->get_record('course', array('id' => $exam->course), '*', MUST_EXIST);
     $cm         = get_coursemodule_from_instance('exam', $exam->id, $course->id, false, MUST_EXIST);
@@ -54,19 +53,16 @@ $params = array(
     'objectid' => $exam->id,
     'relateduserid' => $USER->id,
     'context' => $context
-
 );
 $event = \mod_exam\event\exam_attempted::create($params);
-//$event->add_record_snapshot('exam_grades', $attemptobj->get_attempt());
 $event->trigger();
-
 
 if (!$qzcm = get_coursemodule_from_instance('quiz', $exam->quizid, $course->id)) {
     print_error('invalidcoursemodule');
 }
 $quizobj = quiz::create($qzcm->instance, $USER->id);
 
-/// Print the page header
+// Print the page header.
 $PAGE->set_url('/mod/exam/view.php', array('id' => $cm->id));
 $PAGE->set_title(format_string($exam->name));
 $PAGE->set_heading(format_string($course->fullname));
@@ -92,16 +88,16 @@ if ($quizobj->is_preview_user()) {
     $quizobj->require_capability('mod/quiz:attempt');
 }  */
 // Check capabilities.
-if(!has_capability('mod/exam:attempt', $context) && !has_capability('mod/exam:preview', $context) ){
+if (!has_capability('mod/exam:attempt', $context) && !has_capability('mod/exam:preview', $context)) {
     print_error('donothatvepermissiontoattempt', 'exam');
 }
-// Quiz Json object 
-$quizjson = exam_get_examdata($exam,$quizobj);
+// Quiz Json object.
+$quizjson = exam_get_examdata($exam, $quizobj);
 
 $PAGE->requires->jquery();
 $PAGE->requires->js('/mod/exam/js/slickQuiz.js');
 
-// Output starts here
+// Output starts here.
 echo $OUTPUT->header();
 echo html_writer::start_tag('div', array('id' => 'slickQuiz'));
     echo html_writer::start_tag('div', array('id' => 'exam_navblock', 'class' => 'navblock'));
@@ -112,10 +108,10 @@ echo html_writer::start_tag('div', array('id' => 'slickQuiz'));
     echo html_writer::tag('h1', '<!-- where the quiz name goes -->', array('class' => 'quizName'));
     echo html_writer::start_tag('div', array('class' => 'quizArea'));
         echo html_writer::start_tag('div', array('class' => 'quizHeader'));
-            // Where the quiz main copy goes
+            // Where the quiz main copy goes.
             echo html_writer::tag('a', get_string('getstarted', 'exam'), array('class' => 'button startQuiz'));
         echo html_writer::end_tag('div');
-        // Where the quiz gets built
+        // Where the quiz gets built.
     echo html_writer::end_tag('div');
     echo html_writer::start_tag('div', array('class' => 'quizResults'));
         echo html_writer::start_tag('h3', array('class' => 'quizScore'));
@@ -131,11 +127,12 @@ echo html_writer::start_tag('div', array('id' => 'slickQuiz'));
         echo html_writer::end_tag('div');
     echo html_writer::end_tag('div');
 echo html_writer::end_tag('div');
-// Finish the page
+// Finish the page.
 ?>
 <script>
     var quizJSON = '<?php echo $quizjson;?>';
-    //var questionMode = '<?php echo $quizobj->get_quiz()->preferredbehaviour?>' ? '<?php echo $quizobj->get_quiz()->preferredbehaviour?>' : 'deferredfeedback';
+    /*var questionMode = '<?php echo $quizobj->get_quiz()->preferredbehaviour?>' ? 
+    '<?php echo $quizobj->get_quiz()->preferredbehaviour?>' : 'deferredfeedback';*/
     var questionMode = 'deferredfeedback';
     $(function () {
         $('#slickQuiz').slickQuiz({json: quizJSON, questionPerPage : <?php echo $exam->questionperpage;?>, questionMode : questionMode});
@@ -143,6 +140,4 @@ echo html_writer::end_tag('div');
 </script>
 <?php
 echo $OUTPUT->footer();
-?>
-
 

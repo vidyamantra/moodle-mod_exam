@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -22,16 +21,16 @@
  * This code fragment is called by moodle_needs_upgrading() and
  * /admin/index.php
  *
- * @package    mod_newmodule
- * @copyright  2011 Your Name
+ * @package    mod_exam
+ * @copyright  2014 Pinky Sharma
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2014121200;         // The current module version (Date: YYYYMMDDXX)
+$plugin->version   = 2014121200; // The current module version (Date: YYYYMMDDXX).
 $plugin->release = '1.0 (Build: 2014121200)';
-$plugin->requires  = 2014051200;      // Requires this Moodle version(2.7+)
-$plugin->cron      = 0;               // Period for cron to check this module (secs)
+$plugin->requires  = 2014051200; // Requires this Moodle version(2.7+)
+$plugin->cron      = 0; // Period for cron to check this module (secs).
 $plugin->maturity = MATURITY_STABLE;
-$plugin->component = 'mod_exam'; 
+$plugin->component = 'mod_exam';

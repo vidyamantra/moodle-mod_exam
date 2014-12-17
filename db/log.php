@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -23,7 +22,7 @@
  * in the previous 1.9 exam.
  *
  * @package    mod_exam
- * @copyright  2011 Your Name <your@email.adress>
+ * @copyright  2014 Pinky Sharma
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -32,8 +31,8 @@ defined('MOODLE_INTERNAL') || die();
 global $DB;
 
 $logs = array(
-    array('module'=>'exam', 'action'=>'add', 'mtable'=>'exam', 'field'=>'name'),
-    array('module'=>'exam', 'action'=>'update', 'mtable'=>'exam', 'field'=>'name'),
-    array('module'=>'exam', 'action'=>'view', 'mtable'=>'exam', 'field'=>'name'),
-    array('module'=>'exam', 'action'=>'view all', 'mtable'=>'exam', 'field'=>'name')
+    array('module' => 'exam', 'action' => 'add', 'mtable' => 'exam', 'field' => 'name'),
+    array('module' => 'exam', 'action' => 'update', 'mtable' => 'exam', 'field' => 'name'),
+    array('module' => 'exam', 'action' => 'view', 'mtable' => 'exam', 'field' => 'name'),
+    array('module' => 'exam', 'action' => 'view all', 'mtable' => 'exam', 'field' => 'name')
 );

@@ -1,4 +1,4 @@
-
+/* Css file*/
 .path-mod-exam .quizinfo {
     text-align: center;
 }
@@ -26,10 +26,9 @@
     -moz-border-radius: 5px;
     border-radius: 5px;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-	text-decoration: none;
-	margin: 1px;
-	
-	/*background-color: #005aa8;
+    text-decoration: none;
+    margin: 1px;
+    /*background-color: #005aa8;
     background-image: linear-gradient(to bottom, #0070a8, #0038a8);
     background-repeat: repeat-x;
     border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
@@ -144,8 +143,6 @@
     color: red;
 }
 
-
-
 .path-mod-exam .qnbutton {
     display: block;
     position: relative;
@@ -187,7 +184,7 @@
      cursor: pointer;
 }
 .path-mod-exam span.questext{
-    font-weight: bold; 
+    font-weight: bold;
     font-size: 18px;
     margin: 15px 0 10px;
 }

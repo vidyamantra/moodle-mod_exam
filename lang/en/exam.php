@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -39,14 +38,14 @@ $string['attemptallowed'] = 'Attempts allowed: {$a}';
 $string['attempted'] = 'Attempted: {$a}';
 $string['attemptexamnow'] = 'Attempt exam now';
 $string['cachedef_examdata'] = 'Exam question data';
-$string['donothatvepermissiontoattempt'] = 'Yo do not have permission to attempt this exam.'; 
+$string['donothatvepermissiontoattempt'] = 'Yo do not have permission to attempt this exam.';
 $string['exam'] = 'Exam';
 $string['eventexamattempted'] = 'Exam attempted';
 $string['examfieldset'] = 'Custom example fieldset';
 $string['examname'] = 'Exam name';
 $string['exam:addinstance'] = 'Add a new exam';
 $string['exam:view'] = 'View exam';
-$string['exam:attempt'] = 'Submit exam'; 
+$string['exam:attempt'] = 'Submit exam';
 $string['exam:preview'] = 'Preview exam';
 $string['getstarted'] = 'Get Started!';
 $string['gradeset'] = 'Grade';
@@ -61,7 +60,4 @@ $string['resultnotsaved'] = 'Exam result not saved.';
 $string['selectquiz'] = 'Select Quiz';
 $string['selectquiz_help'] = 'Select quiz already exist in this course for exam.';
 $string['yourfinalgradeis'] = 'Your final grade for this quiz is {$a} / ';
-$string['youscored'] = 'You Scored: '; 
-
-
-
+$string['youscored'] = 'You Scored: ';

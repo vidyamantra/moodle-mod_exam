@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -38,7 +37,7 @@ defined('MOODLE_INTERNAL') || die();
  * @return stdClass Subscription record from DB
  * @throws moodle_exception for an invalid id
  */
-function exam_get_examdata($exam,$quizobj) {
+function exam_get_examdata($exam, $quizobj) {
     global $DB;
     $quizjson = array();
     $questions = array();
@@ -49,38 +48,37 @@ function exam_get_examdata($exam,$quizobj) {
         $quizobj->preload_questions();
         $quizobj->load_questions();
 
-
         $info = array ("exam" => $exam->id, "name" => "",
         "main" => "", "results" => $exam->grade);
-        foreach ($quizobj->get_questions() as $questiondata) { //echo '<pre>';print_r($questiondata);exit;
+        foreach ($quizobj->get_questions() as $questiondata) {
             $options = array();
-            $select_any = true;
-            $force_checkbox = false;
+            $selectany = true;
+            $forcecheckbox = false;
             if ($questiondata->qtype == 'multichoice') {
-                foreach($questiondata->options->answers as $ans) {
+                foreach ($questiondata->options->answers as $ans) {
                     $correct = false;
-                    // Get score if 100% answer correct if only one answer allowed
+                    // Get score if 100% answer correct if only one answer allowed.
                     $correct = $ans->fraction > 0.9 ? true : false;
-                    if($questiondata->options->single < 1) {
-                        $select_any = false;
-                        $force_checkbox = true;
-                        // Get score if all option selected in multiple answer
+                    if ($questiondata->options->single < 1) {
+                        $selectany = false;
+                        $forcecheckbox = true;
+                        // Get score if all option selected in multiple answer.
                         $correct = $ans->fraction > 0 ? true : false;
                     }
-                    $answer = exam_formate_text($questiondata,$ans->answer,$ans->answerformat,'question', 'answer', $ans->id);
+                    $answer = exam_formate_text($questiondata, $ans->answer, $ans->answerformat, 'question', 'answer', $ans->id);
                     $options[] = array("option" => $answer, "correct" => $correct);
                 }
-                $questiontext = exam_formate_text($questiondata, $questiondata->questiontext, $questiondata->questiontextformat,'question', 'questiontext', $questiondata->id);
-                $questions[] = array("q" => $questiontext ,"a" => $options,
+                $questiontext = exam_formate_text($questiondata, $questiondata->questiontext, $questiondata->questiontextformat, 'question', 'questiontext', $questiondata->id);
+                $questions[] = array("q" => $questiontext, "a" => $options,
                 "correct" => $questiondata->options->correctfeedback ? $questiondata->options->correctfeedback : "Your answer is correct.",
-                "incorrect" => $questiondata->options->incorrectfeedback ? $questiondata->options->incorrectfeedback: "Your answer is incorrect.",
-                "select_any" => $select_any,
-                "force_checkbox" => $force_checkbox);
+                "incorrect" => $questiondata->options->incorrectfeedback ? $questiondata->options->incorrectfeedback : "Your answer is incorrect.",
+                "select_any" => $selectany,
+                "force_checkbox" => $forcecheckbox);
             }
         }
         $qjson = array("info" => $info, "questions" => $questions);
         $quizjson = addslashes(json_encode($qjson));
-        // cache the data.
+        // Cache the data.
         $cache->set($exam->id, $quizjson);
     }
     return $quizjson;
@@ -94,10 +92,10 @@ function exam_get_examdata($exam,$quizobj) {
  * @return int
  */
 function exam_attempted($examid) {
-   global $CFG ,$DB;
+    global $CFG, $DB;
 
-   $attempts= $DB->count_records('exam_grades',array('examid'=>$examid));
-   return $attempts;
+    $attempts = $DB->count_records('exam_grades', array('examid' => $examid));
+    return $attempts;
 }
 /**
  * Return list of all quiz
@@ -106,7 +104,7 @@ function exam_attempted($examid) {
  * @return object
  */
 function exam_quiz_list(int $courseid=null) {
-   global $COURSE, $CFG ,$DB;
-   $quizs= $DB->get_records_menu('quiz',array('course'=>$COURSE->id),null,'id,name');
-   return $quizs;
+    global $COURSE, $CFG, $DB;
+    $quizs = $DB->get_records_menu('quiz', array('course' => $COURSE->id), null, 'id, name');
+    return $quizs;
 }
