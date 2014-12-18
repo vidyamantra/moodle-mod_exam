@@ -386,7 +386,7 @@ function exam_grade_item_update($exam, $grades=null) {
         echo "not found";exit;
     }
 
-    $totalquestion = $DB->count_records('quiz_slots', array('quizid' => $exam->quizid));
+    //$totalquestion = $DB->count_records('quiz_slots', array('quizid' => $exam->quizid));
     // $params = array('itemname'=>$exam->name);
     $params = array();
     $params['itemname'] = $exam->name;

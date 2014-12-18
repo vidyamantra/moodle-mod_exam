@@ -69,13 +69,13 @@ $params = array("examid" => $exam->id, "userid" => $userid);
             FROM {user} u, {exam_grades} g
             WHERE u.id = g.userid AND g.examid = :examid";
 
-if($userid){
-     $user =  " AND u.id = :userid" ;
+if ($userid) {
+     $user = " AND u.id = :userid";
      $sql = $sql . $user;
-} 
+}
 
 $result = $DB->get_records_sql($sql, $params);
-if($userid && $userid == $USER->id && empty($result)){
+if ($userid && $userid == $USER->id && empty($result)) {
     redirect('view.php?id='.$cm->id);
 }
 
@@ -83,19 +83,22 @@ if($userid && $userid == $USER->id && empty($result)){
 echo $OUTPUT->header();
 
 echo html_writer::start_tag('div');
-    echo html_writer::start_tag('div', array('class' => 'no-overflow'));
-        if (has_capability('mod/exam:addinstance', context_module::instance($cm->id)) && empty($result)){
-            echo "Nothing to display.";
-        } else {
-            $table = new html_table();
-                $table->head = array('Name', 'Email', 'Attempted', 'Grade');
-                foreach ($result as $gobject) {
-                    $name = $gobject->firstname ." ".$gobject->lastname;
-                    $table->data[] = array($name, $gobject->email, userdate($gobject->attempttime), $gobject->rawgrade);
-                }
-            echo html_writer::table($table);
-        }
-    echo html_writer::end_tag('div');
+echo html_writer::start_tag('div', array('class' => 'no-overflow'));
+$table = new html_table();
+$table->head = array('Name', 'Email', 'Attempted', 'Grade');
+foreach ($result as $gobject) {
+    // Display only student result.
+    if (user_has_role_assignment($gobject->userid, 5, context_course::instance($course->id)->id)) {
+        $name = $gobject->firstname ." ".$gobject->lastname;
+        $table->data[] = array($name, $gobject->email, userdate($gobject->attempttime), $gobject->rawgrade);
+    }
+}
+if (!empty($table->data)) {
+    echo html_writer::table($table);
+} else {
+    echo "Nothing to display";
+}
+echo html_writer::end_tag('div');
 echo html_writer::end_tag('div');
 
 // Print footer.
