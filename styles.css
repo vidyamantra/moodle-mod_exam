@@ -188,6 +188,9 @@
     font-size: 18px;
     margin: 15px 0 10px;
 }
+.path-mod-exam span.questext p{
+    display: inline;
+}
 .path-mod-exam div.quesname{
     margin: 15px 0 10px;
 }

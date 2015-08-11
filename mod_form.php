@@ -58,8 +58,8 @@ class mod_exam_mod_form extends moodleform_mod {
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
 
         // Adding the standard "intro" and "introformat" fields.
-        $this->add_intro_editor();
-
+        //$this->add_intro_editor();
+        $this->standard_intro_elements();
         // ------------------------------------------------------------------------
         // Adding the rest of exam settings, spreeading all them into this fieldset
         // or adding more fieldsets ('header' elements) if needed for better logic.
