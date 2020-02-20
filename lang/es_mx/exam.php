@@ -58,6 +58,6 @@ $string['modulename'] = 'EXAMEN';
 $string['questionperpage'] = 'Preguntas por página';
 $string['resultnotsaved'] = 'Resultados del EXAMEN no guardados.';
 $string['selectquiz'] = 'Seleccionar Examen';
-$string['selectquiz_help'] = 'Seleccionar un examenq ue ya existe en este curso.';
+$string['selectquiz_help'] = 'Seleccionar un examen que ya existe en este curso.';
 $string['yourfinalgradeis'] = 'Su calificación final para este examen es {$a} / ';
 $string['youscored'] = 'Usted obtuvo: ';
