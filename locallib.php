@@ -70,8 +70,8 @@ function exam_get_examdata($exam, $quizobj) {
                 }
                 $questiontext = exam_formate_text($questiondata, $questiondata->questiontext, $questiondata->questiontextformat, 'question', 'questiontext', $questiondata->id);
                 $questions[] = array("q" => $questiontext, "a" => $options,
-                "correct" => $questiondata->options->correctfeedback ? $questiondata->options->correctfeedback : "Your answer is correct.",
-                "incorrect" => $questiondata->options->incorrectfeedback ? $questiondata->options->incorrectfeedback : "Your answer is incorrect.",
+                "correct" => $questiondata->options->correctfeedback ? $questiondata->options->correctfeedback : "Su respuesta es correcta.",
+                "incorrect" => $questiondata->options->incorrectfeedback ? $questiondata->options->incorrectfeedback : "Su respuesta es incorrecta.",
                 "select_any" => $selectany,
                 "force_checkbox" => $forcecheckbox);
             }
