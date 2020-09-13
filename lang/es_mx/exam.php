@@ -28,36 +28,36 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['modulename'] = 'EXAMEN';
-$string['modulenameplural'] = 'EXÁMENES';
-$string['modulename_help'] = 'El módulo de EXAMEN le permite a los usuarios tomar un examen de preguntas de opción múltiple basado en un examen seleccionado.
+$string['modulename'] = 'EXAMENformativo';
+$string['modulenameplural'] = 'EXAMENESformativos';
+$string['modulename_help'] = 'El módulo de EXAMENformativo le permite a los usuarios tomar una evaluación formativa de preguntas de opción múltiple basado en un examen seleccionado.
 <br><br>Aviso sobre Seguridad:<br>
-Este módulo contiene código JavaScript en el navegador. Técnicamente es posible que los estudiantes manipulen sus calificaciones del EXAMEN si saben los parámetros correctos. Use con precaución.';
+Este módulo contiene código JavaScript en el navegador. Técnicamente es posible que los estudiantes manipulen sus calificaciones del EXAMENformativo si saben los parámetros correctos. Use con precaución.';
 
 $string['attemptallowed'] = 'Intentos permitidos: {$a}';
 $string['attempted'] = 'Intentado: {$a}';
-$string['attemptexamnow'] = 'Intentar EXAMEN ahora';
-$string['cachedef_examdata'] = 'Datos de preguntas del EXAMEN';
-$string['donothatvepermissiontoattempt'] = 'Usted no tiene permiso para intentar este EXAMEN.';
-$string['exam'] = 'EXAMEN';
-$string['eventexamattempted'] = 'EXAMEN intentado';
+$string['attemptexamnow'] = 'Intentar EXAMENformativo ahora';
+$string['cachedef_examdata'] = 'Datos de preguntas del EXAMENformativo';
+$string['donothatvepermissiontoattempt'] = 'Usted no tiene permiso para intentar este EXAMENformativo.';
+$string['exam'] = 'EXAMENformativo';
+$string['eventexamattempted'] = 'EXAMENformativo intentado';
 $string['examfieldset'] = 'Conjunto_de_campo personalizado de ejemplo';
-$string['examname'] = 'Nombre del EXAMEN';
-$string['exam:addinstance'] = 'Añadir un nuevo EXAMEN';
-$string['exam:view'] = 'Ver EXAMEN';
-$string['exam:attempt'] = 'Enviar EXAMEN';
-$string['exam:preview'] = 'Previsualizar EXAMEN';
+$string['examname'] = 'Nombre del EXAMENformativo';
+$string['exam:addinstance'] = 'Añadir un nuevo EXAMENformativo';
+$string['exam:view'] = 'Ver EXAMENformativo';
+$string['exam:attempt'] = 'Enviar EXAMENformativo';
+$string['exam:preview'] = 'Previsualizar EXAMENformativo';
 $string['getstarted'] = '¡Empiece!';
 $string['gradeset'] = 'Calificación';
 $string['invalidexamid'] = 'ID del examen inválida';
 $string['marksperquestion'] = 'Puntos para cada pregunta';
 $string['maxpoint'] = 'Puntos máximos';
-$string['noquiz'] = 'No hay Examen para el EXAMEN. <a href="modedit.php?add=quiz&course={$a->cid}&section={$a->section}">Crear examen</a>';
-$string['pluginadministration'] = 'Administración del EXAMEN';
+$string['noquiz'] = 'No hay Examen para el EXAMENformativo. <a href="modedit.php?add=quiz&course={$a->cid}&section={$a->section}">Crear examen</a>';
+$string['pluginadministration'] = 'Administración del EXAMENformativo';
 $string['modulename'] = 'EXAMEN';
 $string['questionperpage'] = 'Preguntas por página';
-$string['resultnotsaved'] = 'Resultados del EXAMEN no guardados.';
+$string['resultnotsaved'] = 'Resultados del EXAMENformativo no guardados.';
 $string['selectquiz'] = 'Seleccionar Examen';
 $string['selectquiz_help'] = 'Seleccionar un examen que ya existe en este curso.';
-$string['yourfinalgradeis'] = 'Su calificación final para este examen es {$a} / ';
+$string['yourfinalgradeis'] = 'Su calificación final para este EXAMENformativo es {$a} / ';
 $string['youscored'] = 'Usted obtuvo: ';
