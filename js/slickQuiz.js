@@ -48,7 +48,7 @@
                 completionResponseMessaging: ( (options.questionMode != undefined && options.questionMode != 'deferredfeedback') ? false : true ),
                 displayQuestionCount: false,   // Deprecate?
                 displayQuestionNumber: true,  // Deprecate?
-                submitQuestionText: 'Submit',
+                submitQuestionText: 'Enviar',
                 questionPerPage:50,
                 animationCallbacks: { // only for the methods that have jQuery animations offering callback
                 	setupQuiz: function () {},
