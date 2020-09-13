@@ -7,7 +7,7 @@ Main purpose of this plugin is to improve performance of quiz,
 so that a large number of users can attempt quiz simultaneously. 
 Only multiple choice questions are supported, if quiz contains 
 any other type question then it will be skipped by this plugin automatically.
-Most of the settings of this module will be same as Quiz.
+Most of the settings of this module will be the same as in Quiz.
 
 Istallation
 ============
@@ -19,7 +19,7 @@ Create exam
 * Since this module depends on Quiz, Fist create a quiz (only with multiple choice questions) for exam.
 * Create an Exam activity and do following settings-
 	- Select quiz - select an existing quiz form dropdown.
-	(Only multiple choice question is supported rest will be skipped) 
+	(Only multiple choice question is supported; the rest will be skipped) 
 	- Marks - default marks is 100. You can change it according to question.
 	- Do other settings (grade, completion) and save it.
 
