@@ -96,15 +96,15 @@ $output = html_writer::start_tag('div', array('class' => 'quizinfo'));
 $output .= html_writer::tag('p', get_string('attemptallowed', 'exam', $exam->attempts ? $exam->attempts : 'unlimited'));
 $output .= html_writer::tag('p', get_string('gradingmethod', 'quiz',
             quiz_get_grading_option_name($exam->grademethod)));
-$output .= html_writer::tag('p', get_string('attempted', 'exam', $attempted_attempt));
+$output .= html_writer::tag('p', get_string('attempted', 'exam', $attemptedattempt));
 $output .= html_writer::end_tag('div');
 echo $output;
 
 $grade = exam_get_user_grades($exam, $USER->id);
 
-if (($exam->attempts == 0) || $attempted_attempt < $exam->attempts) {
+if (($exam->attempts == 0) || $attemptedattempt < $exam->attempts) {
     echo $OUTPUT->single_button(new moodle_url('/mod/exam/attempt.php?id='.$id, array('id' => $id)), get_string('attemptexamnow', 'exam'));
-    if ($attempted_attempt > 0) {
+    if ($attemptedattempt > 0) {
         echo $OUTPUT->heading(quiz_get_grading_option_name($exam->grademethod) .' grade : '. number_format($grade[$USER->id]->rawgrade, 2). ' / ' .number_format($exam->grade, 2));
     }
 } else {
