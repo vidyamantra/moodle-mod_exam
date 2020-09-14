@@ -328,7 +328,7 @@ function exam_get_user_grades($exam, $userid=0) {
                         GROUP BY u.id";
                 break;
             case 2:
-                // Average grade
+                // Average grade.
                 $sql = "SELECT u.id, u.id AS userid, AVG(g.grade) AS rawgrade
                         FROM {user} u, {exam_grades} g
                         WHERE u.id = g.userid AND g.examid = :examid
@@ -389,10 +389,10 @@ function exam_grade_item_update($exam, $grades=null) {
     global $CFG, $DB;
     // require_once($CFG->libdir.'/gradelib.php');
 
-    if (!function_exists('grade_update')) { // workaround for buggy PHP versions.
+    if (!function_exists('grade_update')) { // Workaround for buggy PHP versions.
         require_once($CFG->libdir.'/gradelib.php');
     }
-    if (!function_exists('grade_update')) { // workaround for buggy PHP versions.
+    if (!function_exists('grade_update')) { // Workaround for buggy PHP versions.
         echo "not found";exit;
     }
 
@@ -402,7 +402,7 @@ function exam_grade_item_update($exam, $grades=null) {
     $params['itemname'] = $exam->name;
     // $params['itemname'] = clean_param($exam->name, PARAM_NOTAGS);
     $params['gradetype'] = GRADE_TYPE_VALUE;
-    $params['grademax']  = $exam->grade; // $totalquestion* $exam->marksperquestion;
+    $params['grademax']  = $exam->grade; // Comment $totalquestion* $exam->marksperquestion; !
     $params['grademin']  = 0;
 
     if ($grades === 'reset') {
@@ -565,8 +565,8 @@ function exam_question_pluginfile($course, $context, $component,
     global $CFG;
     require_once($CFG->dirroot . '/mod/quiz/locallib.php');
 
-    // $attemptobj = quiz_attempt::create_from_usage_id($qubaid);
-    // require_login($attemptobj->get_course(), false, $attemptobj->get_cm());
+    // Comment $attemptobj = quiz_attempt::create_from_usage_id($qubaid); !
+    // Comment require_login($attemptobj->get_course(), false, $attemptobj->get_cm()); !
     list($context, $course, $cm) = get_context_info_array($context->id);
     require_login($course, false, $cm);
 
@@ -588,7 +588,7 @@ function exam_question_pluginfile($course, $context, $component,
         send_file_not_found();
     }
 
-    /* if ($attemptobj->is_own_attempt() && !$attemptobj->is_finished()) {
+    /* Comment if ($attemptobj->is_own_attempt() && !$attemptobj->is_finished()) { !
         // In the middle of an attempt.
         if (!$attemptobj->is_preview_user()) {
             $attemptobj->require_capability('mod/quiz:attempt');
@@ -651,7 +651,7 @@ function exam_file_path($args, $forcedownload, $options /*$contextid,$component,
     $options = array('preview' => $options);
     $fs = get_file_storage();
     $relativepath = explode('/', $args);
-    // $fullpath = "/$context->id/$component/$filearea/$relativepath";
+    // Comment $fullpath = "/$context->id/$component/$filearea/$relativepath"; !
     /* if (!$file = $fs->get_file_by_hash(sha1($fullpath)) or $file->is_directory()) {
         send_file_not_found();
     }*/
@@ -703,7 +703,7 @@ function exam_formate_text($questiondata, $text, $formate, $component, $filearea
             $filename = $matches[1];
             $f = 'mod/exam/pluginfile.php';
             $contents = exam_file_rewrite_pluginfile_urls($text, $f, $questiondata->contextid, $component, $filearea, $itemid, $filename);
-            // $contents = exam_make_html_inline($contents);
+            // Comment $contents = exam_make_html_inline($contents); !
             /* return format_text($contents, $questiondata->questiontextformat,
                                    array('context' => $context, 'noclean' => true,
                                          'overflowdiv' => true)); */
