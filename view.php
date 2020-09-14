@@ -90,7 +90,7 @@ if ($exam->intro) { // Conditions to show the intro can change to look for own s
     echo $OUTPUT->box(format_module_intro('exam', $exam, $cm->id), 'generalbox mod_introbox', 'examintro');
 }
 
-$attempted_attempt = exam_user_attempts($exam->id, $USER->id);
+$attemptedattempt = exam_user_attempts($exam->id, $USER->id);
 
 $output = html_writer::start_tag('div', array('class' => 'quizinfo'));
 $output .= html_writer::tag('p', get_string('attemptallowed', 'exam', $exam->attempts ? $exam->attempts : 'unlimited'));
