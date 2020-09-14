@@ -27,11 +27,11 @@
  * This is the "graphical" structure of the exam module:
  *
  *                  exam -------------->---------------|--------------
- *               (CL,pk->id)                           |     
+ *               (CL,pk->id)                           |
  *                     |                               |
- *                     |                         exam_grades   
- *                     |                  (UL, pk->id,fk->examid)    
- *                                        
+ *                     |                         exam_grades
+ *                     |                  (UL, pk->id,fk->examid)
+ *
  **/
 
 /**
