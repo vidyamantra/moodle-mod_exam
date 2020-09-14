@@ -28,7 +28,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['modulename'] = 'EXAMENformativo';
+$string['modulename'] = 'ExAmEnFoRmAtIvO';
 $string['modulenameplural'] = 'EXAMENESformativos';
 $string['modulename_help'] = 'El módulo de EXAMENformativo le permite a los usuarios tomar una evaluación formativa de preguntas de opción múltiple basado en un examen seleccionado.
 <br><br>Aviso sobre Seguridad:<br>
