@@ -64,7 +64,8 @@ function exam_supports($feature) {
         case FEATURE_USES_QUESTIONS:
             return true;
 
-        default:                        return null;
+        default:
+            return null;
     }
 }
 
