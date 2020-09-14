@@ -2,6 +2,9 @@
 ## TODO
 (27 errors/55 warnings) => phplint (0/0), phpcs (0/0), js (185/234), css (1/0), phpdoc (3/0), savepoint (0/0), thirdparty (0/0), grunt (1/1), shifter (0/0), mustache (0/0), 
 
+## 14 sept version 2020091405
+Variable "attempted_attempt" must not contain underscores.
+
 ## 14 sept version 2020091401
 * 8 error(es) y 0 advertencia(s)
 mod\exam\backup\moodle2\backup_exam_settingslib.php
