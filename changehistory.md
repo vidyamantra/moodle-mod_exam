@@ -2,6 +2,45 @@
 ## TODO
 (27 errors/55 warnings) => phplint (0/0), phpcs (0/0), js (185/234), css (1/0), phpdoc (3/0), savepoint (0/0), thirdparty (0/0), grunt (1/1), shifter (0/0), mustache (0/0), 
 
+## 14 sept version 2020091401
+* 8 error(es) y 0 advertencia(s)
+mod\exam\backup\moodle2\backup_exam_settingslib.php
+
+    #1: <?php
+
+    Expected MOODLE_INTERNAL check or config.php inclusion. Change in global state detected.
+    End of line character is invalid; expected "\n" but found "\r\n"
+
+mod\exam\db\caches.php
+
+    #26: $definitions·=·array(
+
+    Expected MOODLE_INTERNAL check or config.php inclusion. Change in global state detected.
+
+mod\exam\lib.php
+
+    #67: ········default:························return·null;
+
+    Closing brace must be on a line by itself
+
+mod\exam\view.php
+
+    #93: $attempted_attempt·=·exam_user_attempts($exam->id,·$USER->id);
+
+    Variable "attempted_attempt" must not contain underscores.
+
+    #99: $output·.=·html_writer::tag('p',·get_string('attempted',·'exam',·$attempted_attempt));
+
+    Variable "attempted_attempt" must not contain underscores.
+
+    #105: if·(($exam->attempts·==·0)·||·$attempted_attempt·<·$exam->attempts)·{
+
+    Variable "attempted_attempt" must not contain underscores.
+
+    #107: ····if·($attempted_attempt·>·0)·{
+
+    Variable "attempted_attempt" must not contain underscores.
+
 ## 14 sept version 20200914
 * 17 error(es) y 55 advertencia(s)
 
