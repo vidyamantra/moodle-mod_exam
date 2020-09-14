@@ -171,7 +171,7 @@ function exam_user_complete($course, $user, $mod, $exam) {
  * @return boolean
  */
 function exam_print_recent_activity($course, $viewfullnames, $timestart) {
-    return false;  //  True if anything was printed, otherwise false.
+    return false;  // True if anything was printed, otherwise false.
 }
 
 /**
@@ -386,7 +386,7 @@ function exam_grade_item_update($exam, $grades=null) {
         echo "not found";exit;
     }
 
-    //$totalquestion = $DB->count_records('quiz_slots', array('quizid' => $exam->quizid));
+    // $totalquestion = $DB->count_records('quiz_slots', array('quizid' => $exam->quizid));
     // $params = array('itemname'=>$exam->name);
     $params = array();
     $params['itemname'] = $exam->name;
