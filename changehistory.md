@@ -4,6 +4,7 @@
 
 ## 14 sept version 2020091405
 Variable "attempted_attempt" must not contain underscores.
+$plugin->version   = 2020091407
 
 ## 14 sept version 2020091401
 * 8 error(es) y 0 advertencia(s)
