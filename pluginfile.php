@@ -19,7 +19,7 @@
  *
  * @package    mod_exam
  * @subpackage file
- * @copyright  2014 Pinky Sharma 
+ * @copyright  2014 Pinky Sharma
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
