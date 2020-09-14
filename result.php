@@ -17,7 +17,7 @@
 /**
  * Redirect from slickQuiz.js with grade
  *
- * @package   mod_exam 
+ * @package   mod_exam
  * @copyright 2014 Pinky Sharma
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
